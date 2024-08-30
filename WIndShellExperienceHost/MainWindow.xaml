@@ -8,10 +8,13 @@
         Title="MainWindow" Height="450" Width="800"
         AllowsTransparency="True"
         WindowStyle="None"
-        Background="{x:Null}"
+      
         
         
         >
+    <Window.Background>
+        <SolidColorBrush Color="Aqua" Opacity="0.4"/>
+    </Window.Background>
     <Grid>
 
     </Grid>
