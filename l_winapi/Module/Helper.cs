@@ -1,4 +1,5 @@
 ﻿using l_winapi.Enums;
+using l_winapi.Screens;
 using System.Runtime.InteropServices;
 
 namespace l_winapi.Module
@@ -15,7 +16,7 @@ namespace l_winapi.Module
 
 #endif
         #endregion
-#test
+
 
 
         [DllImport(WinApiLibs.USER)]
@@ -27,7 +28,16 @@ namespace l_winapi.Module
         }
 
 
+        #region Screens 
+        [DllImport(WinApiLibs.USER, CharSet = CharSet.Unicode)]
+        private static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFOEX lpmi);
 
+        private delegate bool MonitorEnumDelegate(IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData);
+
+        [DllImport(WinApiLibs.USER)]
+        private static extern bool EnumDisplayMonitors(IntPtr hdc, IntPtr lprcClip, MonitorEnumDelegate lpfnEnum, IntPtr dwData);
+
+        #endregion
 
     }
 }
