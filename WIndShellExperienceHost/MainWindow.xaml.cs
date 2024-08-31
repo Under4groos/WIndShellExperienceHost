@@ -34,16 +34,19 @@ namespace WIndShellExperienceHost
                 }));
 
             };
-            screens.Event_GetMonitorEnum += (IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData) =>
+            screens.Event_GetMonitorEnum += () =>
             {
-                Debug.WriteLine(lprcMonitor.ToString());
+                Debug.WriteLine(string.Join(" | ", screens.RECTMonitors));
                 return true;
             };
 
-
+            this.Loaded += MainWindow_Loaded;
 
         }
 
-
+        private void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            screens.Init();
+        }
     }
 }

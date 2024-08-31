@@ -7,24 +7,35 @@ namespace l_winapi.Screens
     {
         public Task? task;
 
-        public MonitorEnumDelegate? Event_GetMonitorEnum = null;
-
+        public MonitorEnumDelegateData? Event_GetMonitorEnum = null;
+        public List<RECT> RECTMonitors = new List<RECT>();
         public Task_Screens()
         {
 
 
+
+        }
+        public void Init()
+        {
             task = new Task(async () =>
             {
                 while (true)
                 {
-                    if (Event_GetMonitorEnum != null)
-                        Helper.w_EnumDisplayMonitors(Event_GetMonitorEnum, 0);
+                    RECTMonitors.Clear();
+                    Helper.w_EnumDisplayMonitors(Updates, 0);
+                    Event_GetMonitorEnum?.Invoke();
                     await Task.Delay(5000);
+
                 }
             });
             task.Start();
         }
+        bool Updates(IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData)
+        {
+            RECTMonitors.Add(lprcMonitor);
 
+            return true;
+        }
 
         private bool disposedValue;
 
@@ -54,6 +65,7 @@ namespace l_winapi.Screens
         {
             // Не изменяйте этот код. Разместите код очистки в методе "Dispose(bool disposing)".
             Dispose(disposing: true);
+            task.Dispose();
             GC.SuppressFinalize(this);
         }
     }

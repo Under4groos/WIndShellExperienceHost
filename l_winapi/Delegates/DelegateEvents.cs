@@ -12,6 +12,7 @@ namespace l_winapi.Delegates
 
     #region Screens
     public delegate bool MonitorEnumDelegate(IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData);
+    public delegate bool MonitorEnumDelegateData();
     #endregion
 
 }
