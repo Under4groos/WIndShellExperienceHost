@@ -4,6 +4,8 @@
 #include <iostream>
 #include <shellapi.h>
 #include <string>
+#include <winuser.h>
+#include <Windows.h>
 MSG msg;
 POINT point;
 std::string message;
@@ -11,12 +13,12 @@ std::string message;
 
 
 #pragma region error
-DLLEXPORT std::string GetLastErrorAsString()
+DLLEXPORT const char* GetLastErrorAsString()
 {
 	//Get the error message ID, if any.
 	DWORD errorMessageID = ::GetLastError();
 	if (errorMessageID == 0) {
-		return std::string(); //No error message has been recorded
+		return std::string().c_str(); //No error message has been recorded
 	}
 
 	LPSTR messageBuffer = nullptr;
@@ -32,7 +34,7 @@ DLLEXPORT std::string GetLastErrorAsString()
 	//Free the Win32's string's buffer.
 	LocalFree(messageBuffer);
 
-	return message;
+	return message.c_str();
 }
 #pragma endregion
 
@@ -52,6 +54,26 @@ DLLEXPORT bool HotKey_Unregister(HWND hwd, int id_register)
 	return UnregisterHotKey(NULL, id_register);
 }
 #pragma endregion
+
+
+#pragma region Screens
+// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-enumdisplaymonitors
+//	WINUSERAPI
+//	BOOL
+//	WINAPI
+//	EnumDisplayMonitors(
+//	_In_opt_ HDC hdc,
+//	_In_opt_ LPCRECT lprcClip,
+//	_In_ MONITORENUMPROC lpfnEnum,
+//	_In_ LPARAM dwData);
+
+DLLEXPORT BOOL WINAPI w_EnumDisplayMonitors(_In_ MONITORENUMPROC lpfnEnum, _In_ LPARAM dwData)
+{
+	return EnumDisplayMonitors(0, 0, lpfnEnum, dwData);
+}
+#pragma endregion
+
+
 
 #pragma region Console
 DLLEXPORT void _AllocConsole()

@@ -18,5 +18,9 @@ namespace l_winapi.Screens
         {
             return new Size((this.Right - this.Left) * w, (this.Bottom - this.Top) * h);
         }
+        public override string ToString()
+        {
+            return $"x:{this.Left} y: {Top} / {this.GetSize()}";
+        }
     }
 }
