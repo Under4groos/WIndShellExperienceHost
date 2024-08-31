@@ -12,18 +12,29 @@ namespace l_winapi.Module
         public static extern int _GetMessage();
 
 
+        [DllImport(WinApiLibs.c_win_module, CallingConvention = CallingConvention.Cdecl, EntryPoint = "GetLastErrorAsString")]
+        public static extern string LastError();
+
+        [DllImport(WinApiLibs.USER, CallingConvention = CallingConvention.Cdecl, EntryPoint = "RegisterHotKey")]
+        private static extern bool HotKey_Register(nint hWnd, int id, int fsModifiers, int vk);
+
+
+
+
+        public static bool p_HotKey_Register(nint hWnd, ModEnums fsModifiers, WinFormKeys vk)
+        {
+            return HotKey_Register(hWnd, 0, (int)fsModifiers, (int)vk);
+        }
+
+
+
 
         #endregion
 
 
 
-        [DllImport(WinApiLibs.c_win_module)]
-        public static extern bool RegisterHotKey(nint hWnd, int id, int fsModifiers, int vk);
 
-        public static bool RegisterHotKeyBind(nint hWnd, ModEnums fsModifiers, WinFormKeys vk)
-        {
-            return RegisterHotKey(hWnd, 0, (int)fsModifiers, (int)vk);
-        }
+
 
 
 
