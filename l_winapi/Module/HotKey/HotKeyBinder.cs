@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using l_winapi.Delegates;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace l_winapi.Module.HotKey
 {
@@ -33,35 +35,51 @@ namespace l_winapi.Module.HotKey
         {
             // Не изменяйте этот код. Разместите код очистки в методе "Dispose(bool disposing)".
             Dispose(disposing: true);
+            task.Dispose();
             GC.SuppressFinalize(this);
         }
         #endregion
-        private List<STRUCT_HotKey> sTRUCT_HotKeys = new List<STRUCT_HotKey>();
+        private ObservableCollection<STRUCT_HotKey> sTRUCT_HotKeys = new ObservableCollection<STRUCT_HotKey>();
+        private Task task;
 
+        public Event_HotKey event_HotKey;
         public HotKeyBinder()
         {
 
         }
-        public void AddKeyBind(STRUCT_HotKey hotKey)
+        public void AddHotKey(STRUCT_HotKey hotKey)
         {
             sTRUCT_HotKeys.Add(hotKey);
 
         }
+        public void RemoveHotKey(STRUCT_HotKey hotKey)
+        {
+            task.Dispose();
+            sTRUCT_HotKeys.Remove(hotKey);
+            this.Init();
+        }
         public void Init()
         {
-            new Thread((() =>
+            Debug.WriteLine($"Init {this}");
+            task = new Task(() =>
             {
+                for (global::System.Int32 i = 0; i < sTRUCT_HotKeys.Count; i++)
+                {
+                    var hk = sTRUCT_HotKeys[i];
+                    hk.RegStatus = Helper.p_HotKey_Register(0, hk.fsModifiers, hk.vk);
+                    Debug.WriteLine($"[rg key][status: {hk.RegStatus}]");
+                }
 
-                bool status_reg = Helper.p_HotKey_Register(0, l_winapi.Enums.ModEnums.MOD_ALT, l_winapi.Enums.WinFormKeys.G);
-                Debug.WriteLine(status_reg);
                 int code = 0;
                 while (true)
                 {
                     code = Helper._GetMessage();
-                    Debug.WriteLine(code);
+                    event_HotKey?.Invoke(code);
                 }
+            });
+            task.Start();
 
-            })).Start();
+
         }
     }
 }
