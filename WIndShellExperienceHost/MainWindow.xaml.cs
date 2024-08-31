@@ -1,20 +1,15 @@
-﻿using l_winapi.Delegates;
-using l_winapi.Module;
-using l_winapi.Module.HotKey;
+﻿using l_winapi.Module.HotKey;
 using l_winapi.Screens;
 using System.Diagnostics;
 using System.Windows.Interop;
 
 namespace WIndShellExperienceHost
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    /// 
 
 
     public partial class MainWindow : System.Windows.Window
     {
+        Task_Screens screens = new Task_Screens();
         HotKeyBinder hotKeyBinder = new HotKeyBinder();
         public MainWindow()
         {
@@ -39,20 +34,16 @@ namespace WIndShellExperienceHost
                 }));
 
             };
-            this.Loaded += MainWindow_Loaded;
-
-
-        }
-
-        private void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            MonitorEnumDelegate monitorEnumDelegate = (IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData) =>
+            screens.Event_GetMonitorEnum += (IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData) =>
             {
                 Debug.WriteLine(lprcMonitor.ToString());
-
                 return true;
             };
-            Helper.w_EnumDisplayMonitors(monitorEnumDelegate, 0);
+
+
+
         }
+
+
     }
 }

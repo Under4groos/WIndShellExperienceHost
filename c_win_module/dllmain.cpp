@@ -96,8 +96,11 @@ DLLEXPORT bool _FreeConsole()
 }
 #pragma endregion
 
-
-
+//#define function []
+//
+//auto fun = function() {
+//
+//	};
 
 
 
