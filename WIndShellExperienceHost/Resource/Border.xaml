@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style TargetType="Border" x:Key="border_hover_button">
+        
+        
+        <Style.Triggers>
+            <Trigger Property="Border.IsMouseOver" Value="True">
+                <Setter Property="Border.Background" Value="{DynamicResource border_back_color_hover}" />
+            </Trigger>
+            <Trigger Property="Border.IsMouseOver" Value="False">
+                <Setter Property="Border.Background" Value="{DynamicResource border_back_color }" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

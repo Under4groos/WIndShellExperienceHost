@@ -26,48 +26,37 @@ namespace WIndShellExperienceHost
             hotKeyBinder.Init();
             hotKeyBinder.event_HotKey = (key) =>
             {
-                this.Dispatcher.Invoke(new Action(() =>
-                {
-
-                    this.Visibility = this.Visibility == System.Windows.Visibility.Visible ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
-
-                    screens.UpdateScreens();
-                    foreach (RECT rect in screens.RECTMonitors)
-                    {
-                        if (Helper._GetCursorPosX() > rect.Left)
-                        {
-                            screens.CuretWindow = rect;
-                        }
-                    }
-
-
-                    this.Left = screens.CuretWindow.Left + (screens.CuretWindow.GetSize().Width / 2 - this.Width / 2);
-                    this.Top = (screens.CuretWindow.Bottom - this.Height) - 2;
-
-
-
-
-
-
-
-
-
-                }));
+                this.ResatructWindow();
 
             };
-            //screens.Event_GetMonitorEnum += () =>
-            //{
-            //    Debug.WriteLine(string.Join(" | ", screens.RECTMonitors));
-            //    return true;
-            //};
+
 
             this.Loaded += MainWindow_Loaded;
 
         }
 
+        public void ResatructWindow()
+        {
+            this.Dispatcher.Invoke(new Action(() =>
+            {
+                this.Visibility = this.Visibility == System.Windows.Visibility.Visible ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+
+                screens.UpdateScreens();
+                foreach (RECT rect in screens.RECTMonitors)
+                {
+                    if (Helper._GetCursorPosX() > rect.Left)
+                    {
+                        screens.CuretWindow = rect;
+                    }
+                }
+                this.Left = screens.CuretWindow.Left + (screens.CuretWindow.GetSize().Width / 2 - this.Width / 2);
+                this.Top = (screens.CuretWindow.Bottom - this.Height) - 2;
+            }));
+        }
+
         private void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            screens.UpdateScreens();
+            this.ResatructWindow();
         }
     }
 }

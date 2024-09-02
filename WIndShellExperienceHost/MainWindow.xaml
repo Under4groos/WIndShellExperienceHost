@@ -10,7 +10,7 @@
         WindowStyle="None"
         ShowInTaskbar="False"
         Background="{DynamicResource window_back}"
-       
+        Topmost="True"
         >
      
     <Window.Style>
@@ -33,6 +33,9 @@
         <ScrollViewer VerticalScrollBarVisibility="Hidden">
             <WrapPanel Margin="5">
                 <View:FilePanel FilePath="asddd" />
+                <View:FilePanel FilePath="asdasd" />
+                <View:FilePanel FilePath="asddd" />
+                <View:FilePanel FilePath="a12312321312" />
             </WrapPanel>
         </ScrollViewer>
          

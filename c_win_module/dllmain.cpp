@@ -50,7 +50,7 @@ DLLEXPORT BOOL WINAPI w_EnumDisplayMonitors(_In_ MONITORENUMPROC lpfnEnum, _In_ 
 {
 	return EnumDisplayMonitors(0, 0, lpfnEnum, dwData);
 }
- 
+
 
 //DLLEXPORT tagRECT WINAPI DisplayMonitor()
 //{
@@ -114,6 +114,9 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	LPVOID lpReserved
 )
 {
+
+	 
+
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
