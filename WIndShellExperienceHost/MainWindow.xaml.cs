@@ -1,6 +1,6 @@
-﻿using l_winapi.Module.HotKey;
+﻿using l_winapi.Module;
+using l_winapi.Module.HotKey;
 using l_winapi.Screens;
-using System.Diagnostics;
 using System.Windows.Interop;
 
 namespace WIndShellExperienceHost
@@ -31,14 +31,35 @@ namespace WIndShellExperienceHost
 
                     this.Visibility = this.Visibility == System.Windows.Visibility.Visible ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
 
+                    screens.UpdateScreens();
+                    foreach (RECT rect in screens.RECTMonitors)
+                    {
+                        if (Helper._GetCursorPosX() > rect.Left)
+                        {
+                            screens.CuretWindow = rect;
+                        }
+                    }
+
+
+                    this.Left = screens.CuretWindow.Left + (screens.CuretWindow.GetSize().Width / 2 - this.Width / 2);
+                    this.Top = screens.CuretWindow.Bottom - this.Height;
+
+
+
+
+
+
+
+
+
                 }));
 
             };
-            screens.Event_GetMonitorEnum += () =>
-            {
-                Debug.WriteLine(string.Join(" | ", screens.RECTMonitors));
-                return true;
-            };
+            //screens.Event_GetMonitorEnum += () =>
+            //{
+            //    Debug.WriteLine(string.Join(" | ", screens.RECTMonitors));
+            //    return true;
+            //};
 
             this.Loaded += MainWindow_Loaded;
 
@@ -46,7 +67,7 @@ namespace WIndShellExperienceHost
 
         private void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            screens.Init();
+            screens.UpdateScreens();
         }
     }
 }

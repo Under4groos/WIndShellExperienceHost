@@ -42,16 +42,19 @@ namespace l_winapi.Module
 
         #region Screens 
         [DllImport(WinApiLibs.USER, CharSet = CharSet.Unicode)]
-        private static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFOEX lpmi);
+        public static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFOEX lpmi);
 
 
 
         [DllImport(WinApiLibs.c_win_module, CallingConvention = CallingConvention.Cdecl, EntryPoint = "w_EnumDisplayMonitors")]
         public static extern bool w_EnumDisplayMonitors(MonitorEnumDelegate lpfnEnum, IntPtr dwData);
 
+        [DllImport(WinApiLibs.c_win_module, CallingConvention = CallingConvention.Cdecl, EntryPoint = "_GetCursorPosX")]
+        public static extern int _GetCursorPosX();
 
-        //[DllImport(WinApiLibs.USER)]
-        //private static extern bool EnumDisplayMonitors(IntPtr hdc, IntPtr lprcClip, MonitorEnumDelegate lpfnEnum, IntPtr dwData);
+
+        [DllImport(WinApiLibs.c_win_module, CallingConvention = CallingConvention.Cdecl, EntryPoint = "DisplayMonitor")]
+        public static extern bool DisplayMonitor(out RECT pThis);
 
 
 
