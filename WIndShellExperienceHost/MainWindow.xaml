@@ -31,7 +31,7 @@
 
     <Border CornerRadius="7" BorderThickness="1"  BorderBrush="{DynamicResource border}">
         <ScrollViewer VerticalScrollBarVisibility="Hidden">
-            <WrapPanel Margin="5">
+            <WrapPanel x:Name="_wrappanel" Margin="5">
                 <View:FilePanel FilePath="asddd" />
                 <View:FilePanel FilePath="asdasd" />
                 <View:FilePanel FilePath="asddd" />

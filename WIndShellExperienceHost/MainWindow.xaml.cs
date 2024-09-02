@@ -1,4 +1,6 @@
-﻿using l_winapi.Module;
+﻿using l_winapi.InputOutput;
+using l_winapi.Module;
+using l_winapi.Module.AppOptions;
 using l_winapi.Module.HotKey;
 using l_winapi.Screens;
 using System.Windows.Interop;
@@ -11,12 +13,14 @@ namespace WIndShellExperienceHost
     {
         Task_Screens screens = new Task_Screens();
         HotKeyBinder hotKeyBinder = new HotKeyBinder();
+        ListApplications List_Applications = new ListApplications();
         public MainWindow()
         {
             InitializeComponent();
 
             IntPtr HWND = new WindowInteropHelper(this).Handle;
 
+            #region hotkey
             hotKeyBinder.AddHotKey(new STRUCT_HotKey()
             {
                 fsModifiers = l_winapi.Enums.ModEnums.MOD_ALT,
@@ -30,9 +34,33 @@ namespace WIndShellExperienceHost
 
             };
 
+            #endregion
+
+
+            FIO.ReadFileToJsonObject("__applications.json", (object o, string data) =>
+            {
+                List_Applications = (ListApplications)o;
+
+
+                _wrappanel.Children.Clear();
+                foreach (var item in List_Applications.apps)
+                {
+                    _wrappanel.Children.Add(new View.FilePanel()
+                    {
+                        FilePath = item.Path,
+                    });
+                }
+
+
+            });
 
             this.Loaded += MainWindow_Loaded;
 
+        }
+
+        public void SaveData()
+        {
+            FIO.ReadFileToJsonObject("__applications.json", List_Applications);
         }
 
         public void ResatructWindow()

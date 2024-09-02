@@ -17,7 +17,20 @@ namespace l_winapi.InputOutput
 
                 var obj_ = JsonConvert.DeserializeObject(
                     File.ReadAllText(path));
-                fileJsonValid?.Invoke(obj_, path);
+                if (obj_ != null)
+                    fileJsonValid?.Invoke(obj_, path);
+            });
+
+        }
+        public static bool ReadFileToJsonObject(string path, object obj)
+        {
+            if (!File.Exists(path))
+                return false;
+            return Trycath.trycath(() =>
+            {
+
+                string obj_str = JsonConvert.SerializeObject(obj);
+                File.WriteAllText(path, obj_str);
             });
 
         }
