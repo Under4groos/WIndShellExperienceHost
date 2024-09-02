@@ -17,4 +17,14 @@
     <ProjectReference Include="..\l_winapi\l_winapi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Shell.IconExtractor">
+      <HintPath>..\..\Shell.IconExtractor\Shell.IconExtractor\bin\Release\net8.0-windows\Shell.IconExtractor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

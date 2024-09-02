@@ -42,7 +42,7 @@ namespace WIndShellExperienceHost
 
 
                     this.Left = screens.CuretWindow.Left + (screens.CuretWindow.GetSize().Width / 2 - this.Width / 2);
-                    this.Top = screens.CuretWindow.Bottom - this.Height;
+                    this.Top = (screens.CuretWindow.Bottom - this.Height) - 2;
 
 
 

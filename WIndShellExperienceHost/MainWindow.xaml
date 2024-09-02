@@ -1,4 +1,4 @@
-﻿<Window x:Class="WIndShellExperienceHost.MainWindow"
+﻿<Window xmlns:View="clr-namespace:WIndShellExperienceHost.View"  x:Class="WIndShellExperienceHost.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,15 +9,16 @@
         AllowsTransparency="True"
         WindowStyle="None"
         ShowInTaskbar="False"
-        
-        
+        Background="{DynamicResource window_back}"
+       
         >
+     
     <Window.Style>
         <Style TargetType="{x:Type Window}">
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome CaptionHeight="20"
-                               
+                                CornerRadius="16"
                               GlassFrameThickness="0"
                               NonClientFrameEdges="None"
                               ResizeBorderThickness="5"
@@ -26,12 +27,14 @@
             </Setter>
         </Style>
     </Window.Style>
-        
-        
-    <Window.Background>
-        <SolidColorBrush Color="Aqua" Opacity="0.4"/>
-    </Window.Background>
-    <Grid>
 
-    </Grid>
+
+    <Border CornerRadius="7" BorderThickness="1"  BorderBrush="{DynamicResource border}">
+        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <WrapPanel Margin="5">
+                <View:FilePanel FilePath="asddd" />
+            </WrapPanel>
+        </ScrollViewer>
+         
+    </Border>
 </Window>
