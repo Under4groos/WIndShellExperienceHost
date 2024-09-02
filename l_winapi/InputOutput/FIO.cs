@@ -15,21 +15,20 @@ namespace l_winapi.InputOutput
             return Trycath.trycath(() =>
             {
 
-                var obj_ = JsonConvert.DeserializeObject(
-                    File.ReadAllText(path));
-                if (obj_ != null)
-                    fileJsonValid?.Invoke(obj_, path);
+
+
+
+                fileJsonValid?.Invoke(File.ReadAllText(path), path);
             });
 
         }
-        public static bool ReadFileToJsonObject(string path, object obj)
+        public static bool WriteFileToJsonObject(string path, object obj)
         {
-            if (!File.Exists(path))
-                return false;
+
             return Trycath.trycath(() =>
             {
 
-                string obj_str = JsonConvert.SerializeObject(obj);
+                string obj_str = JsonConvert.SerializeObject(obj, Formatting.Indented);
                 File.WriteAllText(path, obj_str);
             });
 

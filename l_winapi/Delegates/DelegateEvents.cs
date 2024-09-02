@@ -2,7 +2,7 @@
 
 namespace l_winapi.Delegates
 {
-    public delegate void FileJsonValid(object o, string path);
+    public delegate void FileJsonValid(string json_str, string path);
 
 
     public delegate void trycath_init();

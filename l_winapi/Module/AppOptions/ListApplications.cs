@@ -1,6 +1,6 @@
 ﻿namespace l_winapi.Module.AppOptions
 {
-    public struct ListApplications
+    public class ListApplications
     {
         public Application this[int index]
         {
@@ -15,7 +15,7 @@
         }
 
 
-        public List<Application> apps;
+        public List<Application> apps = new List<Application>();
 
         public int Count => apps.Count;
 

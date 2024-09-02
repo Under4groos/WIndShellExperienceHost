@@ -11,6 +11,9 @@
         ShowInTaskbar="False"
         Background="{DynamicResource window_back}"
         Topmost="True"
+        AllowDrop="True"
+        DragDrop.Drop="Window_Drop"
+        
         >
      
     <Window.Style>
@@ -32,10 +35,7 @@
     <Border CornerRadius="7" BorderThickness="1"  BorderBrush="{DynamicResource border}">
         <ScrollViewer VerticalScrollBarVisibility="Hidden">
             <WrapPanel x:Name="_wrappanel" Margin="5">
-                <View:FilePanel FilePath="asddd" />
-                <View:FilePanel FilePath="asdasd" />
-                <View:FilePanel FilePath="asddd" />
-                <View:FilePanel FilePath="a12312321312" />
+               
             </WrapPanel>
         </ScrollViewer>
          

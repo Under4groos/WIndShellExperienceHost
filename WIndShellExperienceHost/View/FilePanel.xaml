@@ -17,10 +17,10 @@
            
             <Grid Margin="2">
                 <Border  Width="50" Height="50">
-                    <Image Source="https://underko.ru/files/img/back.gif" Panel.ZIndex="-1"/>
+                    
 
                 </Border>
-                
+                <Image x:Name="_icon" Panel.ZIndex="-1"/>
             </Grid>
             <Border VerticalAlignment="Bottom" Margin="0,0,0,0" Background="{DynamicResource border_color_line_text}">
                 <Label Name="_name" HorizontalContentAlignment="Center" Foreground="White" Content="{Binding FilePathA}"/>
