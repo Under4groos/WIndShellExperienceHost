@@ -9,18 +9,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50"
              Margin="3"
-             MinWidth="105" MinHeight="80"
+             MinWidth="110" MinHeight="80"
              MaxWidth="105" MaxHeight="80"
              >
     <Border Style="{DynamicResource border_hover_button}" CornerRadius="4" BorderThickness="0" BorderBrush="#4d4d4d">
         <Grid>
            
             <Grid Margin="2">
-                <Border  Width="50" Height="50">
-                    
+                <Border  Width="35" Height="35">
 
+                    <Image x:Name="_icon" Panel.ZIndex="-1"/>
                 </Border>
-                <Image x:Name="_icon" Panel.ZIndex="-1"/>
+                
             </Grid>
             <Border VerticalAlignment="Bottom" Margin="0,0,0,0" Background="{DynamicResource border_color_line_text}">
                 <Label Name="_name" HorizontalContentAlignment="Center" Foreground="White" Content="{Binding FilePathA}"/>

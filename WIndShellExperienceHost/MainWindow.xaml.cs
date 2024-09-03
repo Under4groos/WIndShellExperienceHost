@@ -4,7 +4,6 @@ using l_winapi.Module.AppOptions;
 using l_winapi.Module.HotKey;
 using l_winapi.Screens;
 using Newtonsoft.Json;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Interop;
 
@@ -16,7 +15,7 @@ namespace WIndShellExperienceHost
     {
         Task_Screens screens = new Task_Screens();
         HotKeyBinder hotKeyBinder = new HotKeyBinder();
-        ListApplications __List_Applications = new ListApplications();
+        AppOptions __List_Applications = new AppOptions();
 
 
         public MainWindow()
@@ -47,7 +46,7 @@ namespace WIndShellExperienceHost
 
             FIO.ReadFileToJsonObject("__applications.json", (string json_str, string data) =>
             {
-                __List_Applications = JsonConvert.DeserializeObject<ListApplications>(json_str) ?? new ListApplications();
+                __List_Applications = JsonConvert.DeserializeObject<AppOptions>(json_str) ?? new AppOptions();
 
 
 
@@ -55,13 +54,31 @@ namespace WIndShellExperienceHost
             });
 
             this.Loaded += MainWindow_Loaded;
+            this.Closed += MainWindow_Closed;
+            this.Closing += MainWindow_Closing;
+            this.SizeChanged += MainWindow_SizeChanged;
+        }
 
+        private void MainWindow_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            SetCenterPosition();
+        }
+
+        private async void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            await this.SaveData();
 
 
         }
 
+        private async void MainWindow_Closed(object? sender, EventArgs e)
+        {
+            await this.SaveData();
+        }
+
         public async Task SaveData()
         {
+            __List_Applications.WindowSize = new System.Windows.Size(this.Width, this.Height);
             FIO.WriteFileToJsonObject("__applications.json", __List_Applications);
 
 
@@ -74,32 +91,25 @@ namespace WIndShellExperienceHost
             Dispatcher.Invoke(() =>
             {
                 _wrappanel.Children.Clear();
-            });
-            await Task.Run(() =>
-            {
-                Parallel.ForAsync(0, __List_Applications.apps.Count, async (i, d) =>
-                {
-                    var item = __List_Applications.apps[i];
-                    Debug.WriteLine($"C: {item.SysPath}");
-                    await Dispatcher.InvokeAsync(() =>
-                    {
-                        _wrappanel.Children.Add(new View.FilePanel()
-                        {
-                            SysPath = item.SysPath,
-                            SysName = item.SysName,
-                        });
-                    });
 
-                });
+                foreach (var item in __List_Applications.apps)
+                {
+                    var c_ = new View.FilePanel();
+                    c_.Refresh(item.SysName, item.SysPath);
+
+                    _wrappanel.Children.Add(c_);
+
+                }
             });
+
         }
 
 
 
         public async Task ResatructWindow()
         {
-            await Rebuild();
-            this.Dispatcher.Invoke(new Action(() =>
+
+            await this.Dispatcher.InvokeAsync(new Action(() =>
             {
 
 
@@ -115,18 +125,27 @@ namespace WIndShellExperienceHost
                     }
                 }
 
+                SetCenterPosition();
 
-                this.Left = screens.CuretWindow.Left + (screens.CuretWindow.GetSize().Width / 2 - this.Width / 2);
-                this.Top = (screens.CuretWindow.Bottom - this.Height) - 2;
+
 
 
                 GC.Collect();
             }));
         }
+        private void SetCenterPosition()
+        {
+            this.Left = screens.CuretWindow.Left + (screens.CuretWindow.GetSize().Width / 2 - this.Width / 2);
+            this.Top = (screens.CuretWindow.Bottom - this.Height) - 2;
+        }
 
         private async void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
+
+            await Rebuild();
             await this.ResatructWindow();
+            this.Width = __List_Applications.WindowSize.Width;
+            this.Height = __List_Applications.WindowSize.Height;
         }
 
 

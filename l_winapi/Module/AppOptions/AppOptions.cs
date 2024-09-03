@@ -1,6 +1,8 @@
-﻿namespace l_winapi.Module.AppOptions
+﻿using System.Windows;
+
+namespace l_winapi.Module.AppOptions
 {
-    public class ListApplications
+    public class AppOptions
     {
         public Application this[int index]
         {
@@ -18,6 +20,11 @@
         public List<Application> apps = new List<Application>();
 
         public int Count => apps.Count;
+
+        public Size WindowSize
+        {
+            get; set;
+        } = new Size();
 
     }
 }

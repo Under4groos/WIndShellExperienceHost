@@ -3,6 +3,10 @@
     <SolidColorBrush x:Key="window_back" Color="#151515"/>
     <SolidColorBrush x:Key="border" Color="#414141"/>
 
+    <SolidColorBrush x:Key="border_down" Color="#131313"/>
+
+
+
     <SolidColorBrush x:Key="border_back_color" Color="Black" Opacity="0.001"/>
     <SolidColorBrush x:Key="border_back_color_hover" Color="#2c2c2c"/>
 

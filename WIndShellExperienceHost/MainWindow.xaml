@@ -33,11 +33,15 @@
 
 
     <Border CornerRadius="7" BorderThickness="1"  BorderBrush="{DynamicResource border}">
-        <ScrollViewer VerticalScrollBarVisibility="Hidden">
-            <WrapPanel x:Name="_wrappanel" Margin="5">
-               
-            </WrapPanel>
-        </ScrollViewer>
-         
+        <Grid>
+            <ScrollViewer Margin="0,0,0,62" VerticalScrollBarVisibility="Hidden">
+                <WrapPanel x:Name="_wrappanel" Margin="5">
+
+                </WrapPanel>
+            </ScrollViewer>
+            <Border MinHeight="60" VerticalAlignment="Bottom" Background="{DynamicResource border_down}">
+
+            </Border>
+        </Grid>
     </Border>
 </Window>
