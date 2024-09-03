@@ -112,9 +112,8 @@ namespace WIndShellExperienceHost
             await this.Dispatcher.InvokeAsync(new Action(() =>
             {
 
-
-
                 this.Visibility = this.Visibility == System.Windows.Visibility.Visible ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+
 
                 screens.UpdateScreens();
                 foreach (RECT rect in screens.RECTMonitors)
@@ -126,6 +125,7 @@ namespace WIndShellExperienceHost
                 }
 
                 SetCenterPosition();
+
 
 
 

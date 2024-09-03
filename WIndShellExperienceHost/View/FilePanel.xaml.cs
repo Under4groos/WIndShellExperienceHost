@@ -1,6 +1,8 @@
 ﻿using Shell.IconExtractor;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Media.Imaging;
+using WIndShellExperienceHost.ViewModel;
 
 namespace WIndShellExperienceHost.View
 {
@@ -10,27 +12,34 @@ namespace WIndShellExperienceHost.View
     public partial class FilePanel : System.Windows.Controls.UserControl
     {
 
-
-
-
-
+        public string SystemPath
+        {
+            get; set;
+        }
+        private Shell.IconExtractor.Enumes.ItemType Type;
 
         public void Refresh(string SysName, string SysPath)
         {
             _name.Content = SysName;
-            var type_ = Shell.IconExtractor.Enumes.ItemType.File;
+            SystemPath = SysPath;
+            Type = Shell.IconExtractor.Enumes.ItemType.File;
+
+            (this.DataContext as VM_FilePanel).FilePath = SystemPath;
+
             if (Directory.Exists(SysPath))
             {
-                type_ = Shell.IconExtractor.Enumes.ItemType.Folder;
+                Type = Shell.IconExtractor.Enumes.ItemType.Folder;
             }
 
             var stru = new Shell.IconExtractor.Strucrure.IcoExtractorOptions()
             {
                 iconSize = Shell.IconExtractor.Enumes.IconSize.ExtraLarge,
-                path = SysPath,
+                path = SystemPath,
                 state = Shell.IconExtractor.Enumes.ItemState.Undefined,
-                type = type_,
+                type = Type,
             };
+
+
             using (IcoExtractor extr = new IcoExtractor(stru))
             {
                 if (extr.GetIcon != null)
@@ -66,7 +75,30 @@ namespace WIndShellExperienceHost.View
             InitializeComponent();
 
 
+            this.DataContext = new VM_FilePanel();
+
+            this.MouseLeftButtonDown += FilePanel_MouseLeftButtonDown;
         }
 
+        private void FilePanel_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            l_winapi.Module.Trycath.trycath(() =>
+            {
+                switch (Type)
+                {
+                    case Shell.IconExtractor.Enumes.ItemType.Drive:
+                        break;
+                    case Shell.IconExtractor.Enumes.ItemType.Folder:
+                        Process.Start("explorer.exe", $"/select, \"{this.SystemPath}\"");
+                        break;
+                    case Shell.IconExtractor.Enumes.ItemType.File:
+                        Process.Start("explorer.exe", this.SystemPath);
+                        break;
+                    default:
+                        break;
+                }
+
+            });
+        }
     }
 }

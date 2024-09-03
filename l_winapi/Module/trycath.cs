@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace l_winapi.Module
 {
-    internal class Trycath
+    public class Trycath
     {
 
         public static bool trycath(trycath_init init, trycath_error err = null)

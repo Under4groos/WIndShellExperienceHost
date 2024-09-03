@@ -5,7 +5,7 @@ namespace WIndShellExperienceHost.ViewModel
     public class VM_FilePanel : INotifyPropertyChanged
     {
         private object _FilePath = string.Empty;
-        public object FilePathA
+        public object FilePath
         {
             get
             {
