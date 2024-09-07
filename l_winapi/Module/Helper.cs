@@ -61,5 +61,14 @@ namespace l_winapi.Module
 
         #endregion
 
+        [DllImport(WinApiLibs.c_win_module, CallingConvention = CallingConvention.Cdecl, EntryPoint = "ShellExplorer")]
+        public static extern int ShellExplorer(IntPtr hwnd, string lpOperation, string lpFile);
+
+
+        #region MSG
+        [DllImport(WinApiLibs.c_win_module, CallingConvention = CallingConvention.Cdecl, EntryPoint = "MessageBoxShowTopMost")]
+        public static extern int MessageBoxShowTopMost(string lpText, string lpCaption);
+
+        #endregion
     }
 }

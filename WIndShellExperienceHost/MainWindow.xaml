@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WIndShellExperienceHost"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" MinHeight="400" MinWidth="700"
         AllowsTransparency="True"
         WindowStyle="None"
         ShowInTaskbar="False"
@@ -32,14 +32,14 @@
     </Window.Style>
 
 
-    <Border CornerRadius="7" BorderThickness="1"  BorderBrush="{DynamicResource border}">
+    <Border CornerRadius="8" BorderThickness="1"  BorderBrush="{DynamicResource border}">
         <Grid>
             <ScrollViewer Margin="0,0,0,62" VerticalScrollBarVisibility="Hidden">
                 <WrapPanel x:Name="_wrappanel" Margin="5">
 
                 </WrapPanel>
             </ScrollViewer>
-            <Border MinHeight="60" VerticalAlignment="Bottom" Background="{DynamicResource border_down}">
+            <Border Margin="2" MinHeight="60" VerticalAlignment="Bottom" Background="{DynamicResource border_down}">
 
             </Border>
         </Grid>

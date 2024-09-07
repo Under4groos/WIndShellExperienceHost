@@ -12,7 +12,7 @@ namespace l_winapi.InputOutput
         {
             if (!File.Exists(path))
                 return false;
-            return Trycath.trycath(() =>
+            return Trycatch.trycatch(() =>
             {
 
 
@@ -25,7 +25,7 @@ namespace l_winapi.InputOutput
         public static bool WriteFileToJsonObject(string path, object obj)
         {
 
-            return Trycath.trycath(() =>
+            return Trycatch.trycatch(() =>
             {
 
                 string obj_str = JsonConvert.SerializeObject(obj, Formatting.Indented);

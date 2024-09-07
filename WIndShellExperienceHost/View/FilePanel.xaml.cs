@@ -76,17 +76,44 @@ namespace WIndShellExperienceHost.View
 
 
             this.DataContext = new VM_FilePanel();
-
+            this.MouseRightButtonDown += FilePanel_MouseRightButtonDown;
             this.MouseLeftButtonDown += FilePanel_MouseLeftButtonDown;
         }
 
-        private void FilePanel_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void FilePanel_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            l_winapi.Module.Trycath.trycath(() =>
+            l_winapi.Module.Trycatch.trycatch(() =>
             {
                 switch (Type)
                 {
                     case Shell.IconExtractor.Enumes.ItemType.Drive:
+
+                        break;
+                    case Shell.IconExtractor.Enumes.ItemType.Folder:
+                        //int status_ = Helper.ShellExplorer(IntPtr.Zero, "open", this.SystemPath);
+
+                        //Debug.WriteLine(status_);
+
+                        break;
+                    case Shell.IconExtractor.Enumes.ItemType.File:
+
+                        break;
+                    default:
+                        break;
+                }
+
+
+            });
+        }
+
+        private void FilePanel_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            l_winapi.Module.Trycatch.trycatch(() =>
+            {
+                switch (Type)
+                {
+                    case Shell.IconExtractor.Enumes.ItemType.Drive:
+
                         break;
                     case Shell.IconExtractor.Enumes.ItemType.Folder:
                         Process.Start("explorer.exe", $"/select, \"{this.SystemPath}\"");
@@ -97,6 +124,7 @@ namespace WIndShellExperienceHost.View
                     default:
                         break;
                 }
+
 
             });
         }

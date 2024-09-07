@@ -8,15 +8,14 @@
 #include <Windows.h>
 MSG msg;
 POINT point;
- 
+
 tagRECT RECTThis;
+
+
+// #define LP (LPCWSTR)
 #define DLLEXPORT extern "C" __declspec(dllexport)
 
 DLLEXPORT int _GetCursorPosX();
-
-
- 
-
 
 #pragma region HotKey
 DLLEXPORT bool HotKey_Register(HWND hwd, int id_register, int vk)
@@ -33,7 +32,6 @@ DLLEXPORT bool HotKey_Unregister(HWND hwd, int id_register)
 	return UnregisterHotKey(NULL, id_register);
 }
 #pragma endregion
-
 
 #pragma region Screens
 // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-enumdisplaymonitors
@@ -65,8 +63,6 @@ DLLEXPORT BOOL WINAPI w_EnumDisplayMonitors(_In_ MONITORENUMPROC lpfnEnum, _In_ 
 
 #pragma endregion
 
-
-
 #pragma region Console
 DLLEXPORT void _AllocConsole()
 {
@@ -88,12 +84,30 @@ DLLEXPORT bool _FreeConsole()
 }
 #pragma endregion
 
-//#define function []
-//
-//auto fun = function() {
-//
-//	};
 
+
+#pragma region Shell
+
+
+
+//SHSTDAPI_(HINSTANCE) ShellExecuteW(
+//	_In_opt_ HWND hwnd,
+//	_In_opt_ LPCWSTR lpOperation,
+//	_In_ LPCWSTR lpFile,
+//	_In_opt_ LPCWSTR lpParameters,
+//	_In_opt_ LPCWSTR lpDirectory,
+//	_In_ INT nShowCmd
+//)
+// 
+//  L"find"
+DLLEXPORT int ShellExplorer(HWND hwnd, const char* lpOperation , const char* lpFile)
+{
+	 
+	return (int)ShellExecute(hwnd, (LPCWSTR)lpOperation, (LPCWSTR)lpFile, NULL, NULL, 0);
+}
+
+
+#pragma endregion
 
 
 DLLEXPORT int _GetMessage()
@@ -109,13 +123,31 @@ DLLEXPORT int _GetCursorPosX()
 	return 0;
 }
 
+#pragma region Hide
+//DLLEXPORT int MessageBoxShowTopMost( const char*  lpText , const char* lpCaption)
+//{
+//
+//
+//	return MessageBox(
+//		NULL,
+//		(LPCTSTR)lpText,
+//		(LPCTSTR)lpCaption,
+//		MB_OK | MB_ICONWARNING | MB_TOPMOST
+//	);
+//
+//}
+#pragma endregion
+
+
+
+#pragma region DLlMain
 BOOL APIENTRY DllMain(HMODULE hModule,
 	DWORD  ul_reason_for_call,
 	LPVOID lpReserved
 )
 {
 
-	 
+
 
 	switch (ul_reason_for_call)
 	{
@@ -127,4 +159,6 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	}
 	return TRUE;
 }
+
+#pragma endregion
 

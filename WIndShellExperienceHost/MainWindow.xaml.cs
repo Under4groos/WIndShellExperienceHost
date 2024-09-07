@@ -21,12 +21,8 @@ namespace WIndShellExperienceHost
         public MainWindow()
         {
             InitializeComponent();
-
-
             Directory.CreateDirectory("Data");
-
             IntPtr HWND = new WindowInteropHelper(this).Handle;
-
             #region hotkey
             hotKeyBinder.AddHotKey(new STRUCT_HotKey()
             {
@@ -43,14 +39,9 @@ namespace WIndShellExperienceHost
 
             #endregion
 
-
             FIO.ReadFileToJsonObject("__applications.json", (string json_str, string data) =>
             {
                 __List_Applications = JsonConvert.DeserializeObject<AppOptions>(json_str) ?? new AppOptions();
-
-
-
-
             });
 
             this.Loaded += MainWindow_Loaded;
@@ -67,8 +58,6 @@ namespace WIndShellExperienceHost
         private async void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             await this.SaveData();
-
-
         }
 
         private async void MainWindow_Closed(object? sender, EventArgs e)
@@ -80,10 +69,7 @@ namespace WIndShellExperienceHost
         {
             __List_Applications.WindowSize = new System.Windows.Size(this.Width, this.Height);
             FIO.WriteFileToJsonObject("__applications.json", __List_Applications);
-
-
             await Rebuild();
-
         }
 
         public async Task Rebuild()
@@ -104,17 +90,12 @@ namespace WIndShellExperienceHost
 
         }
 
-
-
         public async Task ResatructWindow()
         {
-
             await this.Dispatcher.InvokeAsync(new Action(() =>
             {
 
                 this.Visibility = this.Visibility == System.Windows.Visibility.Visible ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
-
-
                 screens.UpdateScreens();
                 foreach (RECT rect in screens.RECTMonitors)
                 {
@@ -123,13 +104,7 @@ namespace WIndShellExperienceHost
                         screens.CuretWindow = rect;
                     }
                 }
-
                 SetCenterPosition();
-
-
-
-
-
                 GC.Collect();
             }));
         }
