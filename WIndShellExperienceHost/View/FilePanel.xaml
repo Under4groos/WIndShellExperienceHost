@@ -12,6 +12,20 @@
              MinWidth="110" MinHeight="80"
              MaxWidth="105" MaxHeight="80"
              >
+   
+    <UserControl.Style>
+        <Style TargetType="{x:Type UserControl}">
+           
+            <Setter Property="ContextMenu">
+                <Setter.Value>
+                    <ContextMenu Background="Transparent" BorderBrush="Transparent">
+                        <MenuItem Header="asd" Background="Transparent"/>
+                        <MenuItem Header="111" Background="Transparent"/>
+                    </ContextMenu>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Style>
     <UserControl.ToolTip>
         <ToolTip>
             <Border CornerRadius="4" BorderThickness="1" BorderBrush="{DynamicResource border}" Background="{DynamicResource border_back_color_hover}">
@@ -23,7 +37,7 @@
         <Grid>
            
             <Grid Margin="2">
-                <Border  Width="35" Height="35">
+                <Border  Width="30" Height="30">
 
                     <Image x:Name="_icon" Panel.ZIndex="-1"/>
                 </Border>

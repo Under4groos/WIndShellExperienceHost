@@ -6,9 +6,7 @@ using WIndShellExperienceHost.ViewModel;
 
 namespace WIndShellExperienceHost.View
 {
-    /// <summary>
-    /// Логика взаимодействия для FilePanel.xaml
-    /// </summary>
+
     public partial class FilePanel : System.Windows.Controls.UserControl
     {
 
@@ -78,6 +76,7 @@ namespace WIndShellExperienceHost.View
             this.DataContext = new VM_FilePanel();
             this.MouseRightButtonDown += FilePanel_MouseRightButtonDown;
             this.MouseLeftButtonDown += FilePanel_MouseLeftButtonDown;
+
         }
 
         private void FilePanel_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

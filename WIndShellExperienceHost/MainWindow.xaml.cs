@@ -16,7 +16,7 @@ namespace WIndShellExperienceHost
         Task_Screens screens = new Task_Screens();
         HotKeyBinder hotKeyBinder = new HotKeyBinder();
         AppOptions __List_Applications = new AppOptions();
-
+        private const string filedata_json = "__applications.json";
 
         public MainWindow()
         {
@@ -31,28 +31,47 @@ namespace WIndShellExperienceHost
             });
 
             hotKeyBinder.Init();
-            hotKeyBinder.event_HotKey = (key) =>
+            hotKeyBinder.event_HotKey = async (key) =>
             {
-                this.ResatructWindow();
-
+                await this.ResatructWindow();
+                this.SetVisibilityStatus();
             };
 
             #endregion
 
-            FIO.ReadFileToJsonObject("__applications.json", (string json_str, string data) =>
-            {
-                __List_Applications = JsonConvert.DeserializeObject<AppOptions>(json_str) ?? new AppOptions();
-            });
 
             this.Loaded += MainWindow_Loaded;
             this.Closed += MainWindow_Closed;
             this.Closing += MainWindow_Closing;
-            this.SizeChanged += MainWindow_SizeChanged;
-        }
 
-        private void MainWindow_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        }
+        private async void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            SetCenterPosition();
+            this.SetVisibility(false);
+            if (File.Exists(filedata_json))
+            {
+                Trycatch.trycatch(() =>
+                {
+
+                    __List_Applications = JsonConvert.DeserializeObject<AppOptions>(File.ReadAllText(filedata_json)) ?? new AppOptions();
+                    this.Width = __List_Applications.WindowSize.Width;
+                    this.Height = __List_Applications.WindowSize.Height;
+
+                });
+            }
+
+
+            await SetCenterPosition();
+            await Rebuild();
+            await this.ResatructWindow();
+
+            this.SizeChanged += MainWindow_SizeChanged;
+
+
+        }
+        private async void MainWindow_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            await SetCenterPosition();
         }
 
         private async void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
@@ -67,14 +86,14 @@ namespace WIndShellExperienceHost
 
         public async Task SaveData()
         {
-            __List_Applications.WindowSize = new System.Windows.Size(this.Width, this.Height);
+            __List_Applications.WindowSize = new System.Windows.Size(this.ActualWidth, this.ActualHeight);
             FIO.WriteFileToJsonObject("__applications.json", __List_Applications);
             await Rebuild();
         }
 
         public async Task Rebuild()
         {
-            Dispatcher.Invoke(() =>
+            await Dispatcher.InvokeAsync(() =>
             {
                 _wrappanel.Children.Clear();
 
@@ -90,12 +109,26 @@ namespace WIndShellExperienceHost
 
         }
 
+        public void SetVisibility(bool Status)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.Visibility = Status ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            });
+        }
+        public void SetVisibilityStatus()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.Visibility = this.Visibility == System.Windows.Visibility.Collapsed ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            });
+        }
         public async Task ResatructWindow()
         {
-            await this.Dispatcher.InvokeAsync(new Action(() =>
+            await this.Dispatcher.InvokeAsync(new Action(async () =>
             {
 
-                this.Visibility = this.Visibility == System.Windows.Visibility.Visible ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+
                 screens.UpdateScreens();
                 foreach (RECT rect in screens.RECTMonitors)
                 {
@@ -104,24 +137,18 @@ namespace WIndShellExperienceHost
                         screens.CuretWindow = rect;
                     }
                 }
-                SetCenterPosition();
+                await SetCenterPosition();
                 GC.Collect();
             }));
         }
-        private void SetCenterPosition()
+        private async Task SetCenterPosition()
         {
             this.Left = screens.CuretWindow.Left + (screens.CuretWindow.GetSize().Width / 2 - this.Width / 2);
             this.Top = (screens.CuretWindow.Bottom - this.Height) - 2;
+            await this.SaveData();
         }
 
-        private async void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
 
-            await Rebuild();
-            await this.ResatructWindow();
-            this.Width = __List_Applications.WindowSize.Width;
-            this.Height = __List_Applications.WindowSize.Height;
-        }
 
 
 
