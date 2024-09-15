@@ -35,28 +35,52 @@ namespace WIndShellExperienceHost
             });
 
             hotKeyBinder.Init();
-            hotKeyBinder.event_HotKey = async (key) =>
+            hotKeyBinder.event_HotKey = (key) =>
             {
-                await this.ResatructWindow();
 
 
-                this.Dispatcher.Invoke(() =>
+
+                this.Dispatcher.Invoke(async () =>
                 {
+
+                    if (screens.LastCuretWindow.Left != screens.CuretWindow.Left)
+                    {
+                        screens.LastCuretWindow = screens.CuretWindow;
+                        this.SetVisibility(true);
+
+                    }
+                    else
+                    {
+                        this.SetVisibilityStatus();
+
+                    }
+
                     if (this.Visibility == System.Windows.Visibility.Visible)
+                    {
+
+                        status_cl = false;
+                        this.ResatructWindow();
                         this.ShellIconExtractorTask();
+                        await this.SaveData();
+
+                    }
+
+
+
                 });
 
             };
 
             #endregion
 
-
             this.Loaded += MainWindow_Loaded;
-            this.Closed += MainWindow_Closed;
-            this.Closing += MainWindow_Closing;
+            this.SizeChanged += (o, e) =>
+            {
+                this.ResatructWindow();
+            };
 
         }
-        private async void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             this.SetVisibility(false);
             if (File.Exists(filedata_json))
@@ -67,33 +91,28 @@ namespace WIndShellExperienceHost
                     __List_Applications = JsonConvert.DeserializeObject<AppOptions>(File.ReadAllText(filedata_json)) ?? new AppOptions();
                     this.Width = __List_Applications.WindowSize.Width;
                     this.Height = __List_Applications.WindowSize.Height;
-                    this.ShellIconExtractorTask();
+
                 });
             }
 
 
-            await SetCenterPosition();
-            await Rebuild();
-            await this.ResatructWindow();
 
-            this.SizeChanged += MainWindow_SizeChanged;
-
-
+            this.SetCenterPosition();
+            //this.SizeChanged += MainWindow_SizeChanged;
         }
 
         private void ShellIconExtractorTask()
         {
-
+            _wrappanel.Children.Clear();
             if (TaskBackShell != null)
             {
 
-                if (TaskBackShell.IsFaulted)
+                if ((int)TaskBackShell.Status == 3)
+                {
+                    status_cl = true;
                     TaskBackShell.Dispose();
 
-                if (TaskBackShell.Status == TaskStatus.RanToCompletion)
-                    TaskBackShell.Dispose();
-                _wrappanel.Children.Clear();
-
+                }
             }
 
 
@@ -110,7 +129,18 @@ namespace WIndShellExperienceHost
 
                  foreach (var item in __List_Applications.apps)
                  {
+                     if (status_cl)
+                     {
+                         this.Dispatcher.Invoke(() =>
+                         {
+                             _wrappanel.Children.Clear();
+                         });
 
+                         status_cl = false;
+                         break;
+                     }
+
+                     Thread.Sleep(5);
                      if (Directory.Exists(item.SysPath))
                      {
                          stru.type = Shell.IconExtractor.Enumes.ItemType.Folder;
@@ -120,6 +150,7 @@ namespace WIndShellExperienceHost
                          stru.type = Shell.IconExtractor.Enumes.ItemType.File;
                      }
                      stru.path = item.SysPath;
+
 
                      string SysPathImage = Path.GetFullPath(Path.Combine("Data", $"{item.SysName}.png"));
                      if (File.Exists(SysPathImage))
@@ -157,112 +188,60 @@ namespace WIndShellExperienceHost
                          }
                      }
 
-                     //var c_ = new View.FilePanel();
-                     //c_.Refresh(item.SysName, item.SysPath);
-
-                     //_wrappanel.Children.Add(c_);
 
                  }
                  status_cl = false;
              });
+
             TaskBackShell.Start();
         }
 
 
-        private async void MainWindow_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
-        {
-            await SetCenterPosition();
-        }
 
-        private async void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
-        {
-            await this.SaveData();
-        }
-
-        private async void MainWindow_Closed(object? sender, EventArgs e)
-        {
-            await this.SaveData();
-        }
 
         public async Task SaveData()
         {
             __List_Applications.WindowSize = new System.Windows.Size(this.ActualWidth, this.ActualHeight);
             FIO.WriteFileToJsonObject("__applications.json", __List_Applications);
-            await Rebuild();
-        }
-
-        public async Task Rebuild()
-        {
-
-
-            //await Dispatcher.InvokeAsync(() =>
-            //{
-            //    _wrappanel.Children.Clear();
-
-            //    foreach (var item in __List_Applications.apps)
-            //    {
-            //        var c_ = new View.FilePanel();
-            //        c_.Refresh(item.SysName, item.SysPath);
-
-            //        _wrappanel.Children.Add(c_);
-
-            //    }
-            //});
 
         }
+
+
 
         public void SetVisibility(bool Status)
         {
-            this.Dispatcher.Invoke(() =>
-            {
-                this.Visibility = Status ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-            });
+            this.Visibility = Status ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+
+
         }
         public void SetVisibilityStatus()
         {
-            this.Dispatcher.Invoke(() =>
-            {
-                this.Visibility = this.Visibility == System.Windows.Visibility.Collapsed ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-            });
+            this.Visibility = this.Visibility == System.Windows.Visibility.Collapsed ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+
+
         }
-        public async Task ResatructWindow()
+        public void ResatructWindow()
         {
 
-            await this.Dispatcher.InvokeAsync(new Action(async () =>
+            screens.UpdateScreens();
+            foreach (RECT rect in screens.RECTMonitors)
             {
-
-
-                screens.UpdateScreens();
-                foreach (RECT rect in screens.RECTMonitors)
+                if (Helper._GetCursorPosX() > rect.Left)
                 {
-                    if (Helper._GetCursorPosX() > rect.Left)
-                    {
-                        screens.CuretWindow = rect;
+                    screens.CuretWindow = rect;
 
 
-                    }
                 }
-
-                if (screens.LastCuretWindow.Left != screens.CuretWindow.Left)
-                {
-                    screens.LastCuretWindow = screens.CuretWindow;
-                    this.SetVisibility(true);
-                }
-                else
-                {
-                    this.SetVisibilityStatus();
-                }
-
-                await SetCenterPosition();
-                GC.Collect();
-            }));
+            }
+            this.SetCenterPosition();
+            GC.Collect();
 
         }
-        private async Task SetCenterPosition()
+        private void SetCenterPosition()
         {
             this.Left = screens.CuretWindow.Left + (screens.CuretWindow.GetSize().Width / 2 - this.Width / 2);
             this.Top = (screens.CuretWindow.Bottom - this.Height) - 2;
-            await this.SaveData();
+
         }
 
 
@@ -297,9 +276,9 @@ namespace WIndShellExperienceHost
                     if (!__List_Applications.apps.Contains(new_app))
                         __List_Applications.apps.Add(new_app);
                 }
-
+                this.ShellIconExtractorTask();
                 await this.SaveData();
-                await Rebuild();
+
             }
         }
     }

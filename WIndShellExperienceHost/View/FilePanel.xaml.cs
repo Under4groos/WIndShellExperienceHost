@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using WIndShellExperienceHost.ViewModel;
 
@@ -19,50 +20,10 @@ namespace WIndShellExperienceHost.View
         {
             _name.Content = SysName;
             SystemPath = SysPath;
-        }
-
-        public void Refresh(string SysName, string SysPath)
-        {
-            _name.Content = SysName;
-            SystemPath = SysPath;
-            Type = Shell.IconExtractor.Enumes.ItemType.File;
-
             (this.DataContext as VM_FilePanel).FilePath = SystemPath;
-
-            //if (Directory.Exists(SysPath))
-            //{
-            //    Type = Shell.IconExtractor.Enumes.ItemType.Folder;
-            //}
-
-            //var stru = new Shell.IconExtractor.Strucrure.IcoExtractorOptions()
-            //{
-            //    iconSize = Shell.IconExtractor.Enumes.IconSize.ExtraLarge,
-            //    path = SystemPath,
-            //    state = Shell.IconExtractor.Enumes.ItemState.Undefined,
-            //    type = Type,
-            //};
-
-            //Task.Run(() =>
-            //{
-            //    using (IcoExtractor extr = new IcoExtractor(stru))
-            //    {
-            //        if (extr.GetIcon != null)
-            //        {
-            //            string SysPathImage = Path.GetFullPath(Path.Combine("Data", $"{SysName}.png"));
-
-            //            extr.SaveToFile(SysPathImage);
-
-
-            //            this.Dispatcher.Invoke(() =>
-            //            {
-
-            //                SetImage(SysPathImage);
-            //            });
-            //        }
-            //    }
-            //});
-
         }
+
+
 
         public void SetImage(string SysPathImage)
         {
@@ -83,7 +44,17 @@ namespace WIndShellExperienceHost.View
         public FilePanel()
         {
             InitializeComponent();
+            this.Opacity = 0;
 
+            DoubleAnimation buttonAnimation = new DoubleAnimation()
+            {
+                DecelerationRatio = 0.1,
+                From = 0,
+                // SpeedRatio = 4,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(1)
+            };
+            this.BeginAnimation(FilePanel.OpacityProperty, buttonAnimation);
 
             this.DataContext = new VM_FilePanel();
             this.MouseRightButtonDown += FilePanel_MouseRightButtonDown;
