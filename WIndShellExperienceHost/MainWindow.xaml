@@ -1,4 +1,4 @@
-﻿<Window xmlns:View="clr-namespace:WIndShellExperienceHost.View"  x:Class="WIndShellExperienceHost.MainWindow"
+﻿<Window xmlns:Controls="clr-namespace:WIndShellExperienceHost.View.Controls"  xmlns:View="clr-namespace:WIndShellExperienceHost.View"  x:Class="WIndShellExperienceHost.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -39,9 +39,7 @@
 
                 </WrapPanel>
             </ScrollViewer>
-            <Border Margin="2" MinHeight="60" VerticalAlignment="Bottom" Background="{DynamicResource border_down}">
-
-            </Border>
+           <Controls:BottomTrayWnd />
         </Grid>
     </Border>
 </Window>

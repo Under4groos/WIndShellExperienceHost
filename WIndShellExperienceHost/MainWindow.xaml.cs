@@ -4,8 +4,11 @@ using l_winapi.Module.AppOptions;
 using l_winapi.Module.HotKey;
 using l_winapi.Screens;
 using Newtonsoft.Json;
+using Shell.IconExtractor;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Interop;
+using WIndShellExperienceHost.View;
 
 namespace WIndShellExperienceHost
 {
@@ -17,7 +20,8 @@ namespace WIndShellExperienceHost
         HotKeyBinder hotKeyBinder = new HotKeyBinder();
         AppOptions __List_Applications = new AppOptions();
         private const string filedata_json = "__applications.json";
-
+        Task TaskBackShell;
+        bool status_cl = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -34,7 +38,14 @@ namespace WIndShellExperienceHost
             hotKeyBinder.event_HotKey = async (key) =>
             {
                 await this.ResatructWindow();
-                this.SetVisibilityStatus();
+
+
+                this.Dispatcher.Invoke(() =>
+                {
+                    if (this.Visibility == System.Windows.Visibility.Visible)
+                        this.ShellIconExtractorTask();
+                });
+
             };
 
             #endregion
@@ -56,7 +67,7 @@ namespace WIndShellExperienceHost
                     __List_Applications = JsonConvert.DeserializeObject<AppOptions>(File.ReadAllText(filedata_json)) ?? new AppOptions();
                     this.Width = __List_Applications.WindowSize.Width;
                     this.Height = __List_Applications.WindowSize.Height;
-
+                    this.ShellIconExtractorTask();
                 });
             }
 
@@ -69,6 +80,95 @@ namespace WIndShellExperienceHost
 
 
         }
+
+        private void ShellIconExtractorTask()
+        {
+
+            if (TaskBackShell != null)
+            {
+
+                if (TaskBackShell.IsFaulted)
+                    TaskBackShell.Dispose();
+
+                if (TaskBackShell.Status == TaskStatus.RanToCompletion)
+                    TaskBackShell.Dispose();
+                _wrappanel.Children.Clear();
+
+            }
+
+
+            TaskBackShell = new Task(() =>
+             {
+
+                 var stru = new Shell.IconExtractor.Strucrure.IcoExtractorOptions()
+                 {
+                     iconSize = Shell.IconExtractor.Enumes.IconSize.ExtraLarge,
+                     path = "",
+                     state = Shell.IconExtractor.Enumes.ItemState.Undefined,
+                     type = Shell.IconExtractor.Enumes.ItemType.File,
+                 };
+
+                 foreach (var item in __List_Applications.apps)
+                 {
+
+                     if (Directory.Exists(item.SysPath))
+                     {
+                         stru.type = Shell.IconExtractor.Enumes.ItemType.Folder;
+                     }
+                     else
+                     {
+                         stru.type = Shell.IconExtractor.Enumes.ItemType.File;
+                     }
+                     stru.path = item.SysPath;
+
+                     string SysPathImage = Path.GetFullPath(Path.Combine("Data", $"{item.SysName}.png"));
+                     if (File.Exists(SysPathImage))
+                     {
+                         this.Dispatcher.Invoke(() =>
+                         {
+
+                             FilePanel c_ = new View.FilePanel();
+                             c_.SetData(item.SysName, item.SysPath);
+                             c_.SetImage(SysPathImage);
+                             _wrappanel.Children.Add(c_);
+                         });
+                         continue;
+                     }
+
+
+                     using (IcoExtractor extr = new IcoExtractor(stru))
+                     {
+                         if (extr.GetIcon != null)
+                         {
+
+                             Debug.WriteLine(SysPathImage);
+                             extr.SaveToFile(SysPathImage);
+
+
+                             extr.Dispose();
+                             this.Dispatcher.Invoke(() =>
+                             {
+
+                                 FilePanel c_ = new View.FilePanel();
+                                 c_.SetData(item.SysName, item.SysPath);
+                                 c_.SetImage(SysPathImage);
+                                 _wrappanel.Children.Add(c_);
+                             });
+                         }
+                     }
+
+                     //var c_ = new View.FilePanel();
+                     //c_.Refresh(item.SysName, item.SysPath);
+
+                     //_wrappanel.Children.Add(c_);
+
+                 }
+                 status_cl = false;
+             });
+            TaskBackShell.Start();
+        }
+
+
         private async void MainWindow_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
         {
             await SetCenterPosition();
@@ -93,19 +193,21 @@ namespace WIndShellExperienceHost
 
         public async Task Rebuild()
         {
-            await Dispatcher.InvokeAsync(() =>
-            {
-                _wrappanel.Children.Clear();
 
-                foreach (var item in __List_Applications.apps)
-                {
-                    var c_ = new View.FilePanel();
-                    c_.Refresh(item.SysName, item.SysPath);
 
-                    _wrappanel.Children.Add(c_);
+            //await Dispatcher.InvokeAsync(() =>
+            //{
+            //    _wrappanel.Children.Clear();
 
-                }
-            });
+            //    foreach (var item in __List_Applications.apps)
+            //    {
+            //        var c_ = new View.FilePanel();
+            //        c_.Refresh(item.SysName, item.SysPath);
+
+            //        _wrappanel.Children.Add(c_);
+
+            //    }
+            //});
 
         }
 
@@ -125,6 +227,7 @@ namespace WIndShellExperienceHost
         }
         public async Task ResatructWindow()
         {
+
             await this.Dispatcher.InvokeAsync(new Action(async () =>
             {
 
@@ -135,11 +238,25 @@ namespace WIndShellExperienceHost
                     if (Helper._GetCursorPosX() > rect.Left)
                     {
                         screens.CuretWindow = rect;
+
+
                     }
                 }
+
+                if (screens.LastCuretWindow.Left != screens.CuretWindow.Left)
+                {
+                    screens.LastCuretWindow = screens.CuretWindow;
+                    this.SetVisibility(true);
+                }
+                else
+                {
+                    this.SetVisibilityStatus();
+                }
+
                 await SetCenterPosition();
                 GC.Collect();
             }));
+
         }
         private async Task SetCenterPosition()
         {

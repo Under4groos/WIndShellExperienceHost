@@ -1,5 +1,4 @@
-﻿using Shell.IconExtractor;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Windows.Media.Imaging;
 using WIndShellExperienceHost.ViewModel;
@@ -16,6 +15,12 @@ namespace WIndShellExperienceHost.View
         }
         private Shell.IconExtractor.Enumes.ItemType Type;
 
+        public void SetData(string SysName, string SysPath)
+        {
+            _name.Content = SysName;
+            SystemPath = SysPath;
+        }
+
         public void Refresh(string SysName, string SysPath)
         {
             _name.Content = SysName;
@@ -24,32 +29,39 @@ namespace WIndShellExperienceHost.View
 
             (this.DataContext as VM_FilePanel).FilePath = SystemPath;
 
-            if (Directory.Exists(SysPath))
-            {
-                Type = Shell.IconExtractor.Enumes.ItemType.Folder;
-            }
+            //if (Directory.Exists(SysPath))
+            //{
+            //    Type = Shell.IconExtractor.Enumes.ItemType.Folder;
+            //}
 
-            var stru = new Shell.IconExtractor.Strucrure.IcoExtractorOptions()
-            {
-                iconSize = Shell.IconExtractor.Enumes.IconSize.ExtraLarge,
-                path = SystemPath,
-                state = Shell.IconExtractor.Enumes.ItemState.Undefined,
-                type = Type,
-            };
+            //var stru = new Shell.IconExtractor.Strucrure.IcoExtractorOptions()
+            //{
+            //    iconSize = Shell.IconExtractor.Enumes.IconSize.ExtraLarge,
+            //    path = SystemPath,
+            //    state = Shell.IconExtractor.Enumes.ItemState.Undefined,
+            //    type = Type,
+            //};
+
+            //Task.Run(() =>
+            //{
+            //    using (IcoExtractor extr = new IcoExtractor(stru))
+            //    {
+            //        if (extr.GetIcon != null)
+            //        {
+            //            string SysPathImage = Path.GetFullPath(Path.Combine("Data", $"{SysName}.png"));
+
+            //            extr.SaveToFile(SysPathImage);
 
 
-            using (IcoExtractor extr = new IcoExtractor(stru))
-            {
-                if (extr.GetIcon != null)
-                {
-                    string SysPathImage = Path.GetFullPath(Path.Combine("Data", $"{SysName}.png"));
+            //            this.Dispatcher.Invoke(() =>
+            //            {
 
-                    extr.SaveToFile(SysPathImage);
+            //                SetImage(SysPathImage);
+            //            });
+            //        }
+            //    }
+            //});
 
-
-                    SetImage(SysPathImage);
-                }
-            }
         }
 
         public void SetImage(string SysPathImage)
