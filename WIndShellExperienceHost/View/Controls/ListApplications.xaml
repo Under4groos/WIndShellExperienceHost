@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="WIndShellExperienceHost.View.Controls.ListApplications"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WIndShellExperienceHost.View.Controls"
+             mc:Ignorable="d"
+             xmlns:Controls="clr-namespace:WIndShellExperienceHost.View.Controls"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ContextMenu x:Key="_cm_select">
+            <Controls:Context_MenuItem Tag="ra" Header="Run is Administrator"/>
+            <Controls:Context_MenuItem Tag="sh" Header="Show in Explorer"/>
+            <Controls:Context_MenuItem Tag="cp" Header="Copy path"/>
+            <Controls:Context_MenuItem Tag="rm" Header="Remove "/>
+        </ContextMenu>
+    </UserControl.Resources>
+
+    <ScrollViewer  VerticalScrollBarVisibility="Hidden">
+        <WrapPanel x:Name="_wrappanel" Margin="5">
+
+        </WrapPanel>
+    </ScrollViewer>
+</UserControl>

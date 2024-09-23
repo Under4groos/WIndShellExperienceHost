@@ -5,7 +5,7 @@
         
         <Style.Triggers>
             <Trigger Property="Border.IsMouseOver" Value="True">
-                <Setter Property="Border.Background" Value="{DynamicResource border_back_color_hover}" />
+                <Setter Property="Border.Background" Value="{DynamicResource border_back_color_op_11}" />
             </Trigger>
             <Trigger Property="Border.IsMouseOver" Value="False">
                 <Setter Property="Border.Background" Value="{DynamicResource border_back_color }" />

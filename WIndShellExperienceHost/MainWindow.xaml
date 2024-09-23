@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WIndShellExperienceHost"
+        
+          
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="400" MinWidth="700"
         AllowsTransparency="True"
@@ -16,7 +18,7 @@
         DragDrop.Drop="Window_Drop"
         x:Name="mainWindow"
         >
-    
+
     <Window.Style>
         <Style TargetType="{x:Type Window}">
             <Setter Property="WindowChrome.WindowChrome">
@@ -34,27 +36,23 @@
 
 
     <Border x:Name="_b_border" CornerRadius="8" BorderThickness="1"  BorderBrush="{DynamicResource border}">
-        
 
-    
+
+
         <Grid>
             <Border CornerRadius="{Binding ElementName=_b_border , Path=CornerRadius}">
                 <Border.Effect>
                     <BlurEffect Radius="10"/>
                 </Border.Effect>
                 <Border.Background>
-                    <ImageBrush Opacity="0.1" ImageSource="C:\Users\UnderKo\Downloads\0d2834397648fc0bacd8592e9df729d9.jpg" Stretch="UniformToFill"/>
+                    <ImageBrush Opacity="0.1" ImageSource="C:\Users\UnderKo\Documents\з.png" Stretch="UniformToFill"/>
                 </Border.Background>
-             
-                     
+
+
             </Border>
-            
-            <ScrollViewer Margin="0,0,0,62" VerticalScrollBarVisibility="Hidden">
-                <WrapPanel x:Name="_wrappanel" Margin="5">
-                    
-                </WrapPanel>
-            </ScrollViewer>
-           <Controls:BottomTrayWnd  />
+            <Controls:ListApplications x:Name="ui_applications" Margin="0,0,0,62" />
+
+            <Controls:BottomTrayWnd  />
         </Grid>
     </Border>
 </Window>

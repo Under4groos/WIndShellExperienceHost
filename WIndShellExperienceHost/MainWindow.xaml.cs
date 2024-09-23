@@ -1,14 +1,10 @@
-﻿using l_winapi.InputOutput;
-using l_winapi.Module;
-using l_winapi.Module.AppOptions;
+﻿using l_winapi.Module;
 using l_winapi.Module.HotKey;
 using l_winapi.Screens;
-using Newtonsoft.Json;
-using Shell.IconExtractor;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Interop;
-using WIndShellExperienceHost.View;
+using System.Windows.Media.Animation;
+using WIndShellExperienceHost.Module;
 
 namespace WIndShellExperienceHost
 {
@@ -16,12 +12,22 @@ namespace WIndShellExperienceHost
 
     public partial class MainWindow : System.Windows.Window
     {
-        Task_Screens screens = new Task_Screens();
-        HotKeyBinder hotKeyBinder = new HotKeyBinder();
-        AppOptions __List_Applications = new AppOptions();
-        private const string filedata_json = "__applications.json";
-        Task TaskBackShell;
-        bool status_cl = false;
+        private Task_Screens screens = new Task_Screens();
+        private HotKeyBinder hotKeyBinder = new HotKeyBinder();
+
+
+        private Task TaskBackShell;
+
+
+        #region Animations
+
+        DoubleAnimation WindowOpacityHide;
+        DoubleAnimation WindowOpacityShow;
+
+
+        #endregion
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,188 +43,115 @@ namespace WIndShellExperienceHost
             hotKeyBinder.Init();
             hotKeyBinder.event_HotKey = (key) =>
             {
-
-
-
                 this.Dispatcher.Invoke(async () =>
                 {
-
                     if (screens.LastCuretWindow.Left != screens.CuretWindow.Left)
                     {
                         screens.LastCuretWindow = screens.CuretWindow;
                         this.SetVisibility(true);
-
                     }
                     else
                     {
                         this.SetVisibilityStatus();
-
                     }
 
                     if (this.Visibility == System.Windows.Visibility.Visible)
                     {
 
-                        status_cl = false;
+                        ui_applications.status_cl = false;
                         this.ResatructWindow();
-                        this.ShellIconExtractorTask();
-                        await this.SaveData();
+                        ui_applications.ShellIconExtractorTask();
+
 
                     }
+                    else
+                    {
 
-
-
+                        G_.AllOptions.SaveData();
+                        ui_applications.Clear();
+                    }
                 });
 
             };
 
             #endregion
 
+            WindowOpacityHide = new DoubleAnimation()
+            {
+                DecelerationRatio = 0.1,
+                From = 0,
+
+                To = 1,
+                Duration = TimeSpan.FromSeconds(1)
+            };
+            WindowOpacityHide.Completed += WindowOpacity_Completed_hide;
+
+
+            WindowOpacityShow = new DoubleAnimation()
+            {
+                DecelerationRatio = 0.1,
+                From = 0,
+
+                To = 1,
+                Duration = TimeSpan.FromSeconds(1)
+            };
+            WindowOpacityShow.Completed += WindowOpacity_Completed_Show;
+
+
             this.Loaded += MainWindow_Loaded;
             this.SizeChanged += (o, e) =>
             {
                 this.ResatructWindow();
+                G_.AllOptions.List_Applications.WindowSize = e.NewSize;
+
             };
+            G_.AllOptions.Loaded += () =>
+            {
+                this.Width = G_.AllOptions.List_Applications.WindowSize.Width;
+                this.Height = G_.AllOptions.List_Applications.WindowSize.Height;
+                this.SetCenterPosition();
+            };
+        }
+        private void WindowOpacity_Completed_Show(object? sender, EventArgs e)
+        {
+            this.Visibility = System.Windows.Visibility.Visible;
 
         }
+        private void WindowOpacity_Completed_hide(object? sender, EventArgs e)
+        {
+            this.Visibility = System.Windows.Visibility.Collapsed;
+
+        }
+
         private void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             this.SetVisibility(false);
-            if (File.Exists(filedata_json))
-            {
-                Trycatch.trycatch(() =>
-                {
 
-                    __List_Applications = JsonConvert.DeserializeObject<AppOptions>(File.ReadAllText(filedata_json)) ?? new AppOptions();
-                    this.Width = __List_Applications.WindowSize.Width;
-                    this.Height = __List_Applications.WindowSize.Height;
-
-                });
-            }
-
-
-
-            this.SetCenterPosition();
-            //this.SizeChanged += MainWindow_SizeChanged;
-        }
-
-        private void ShellIconExtractorTask()
-        {
-            _wrappanel.Children.Clear();
-            if (TaskBackShell != null)
-            {
-
-                if ((int)TaskBackShell.Status == 3)
-                {
-                    status_cl = true;
-                    TaskBackShell.Dispose();
-
-                }
-            }
-
-
-            TaskBackShell = new Task(() =>
-             {
-
-                 var stru = new Shell.IconExtractor.Strucrure.IcoExtractorOptions()
-                 {
-                     iconSize = Shell.IconExtractor.Enumes.IconSize.ExtraLarge,
-                     path = "",
-                     state = Shell.IconExtractor.Enumes.ItemState.Undefined,
-                     type = Shell.IconExtractor.Enumes.ItemType.File,
-                 };
-
-                 foreach (var item in __List_Applications.apps)
-                 {
-                     if (status_cl)
-                     {
-                         this.Dispatcher.Invoke(() =>
-                         {
-                             _wrappanel.Children.Clear();
-                         });
-
-                         status_cl = false;
-                         break;
-                     }
-
-                     Thread.Sleep(5);
-                     if (Directory.Exists(item.SysPath))
-                     {
-                         stru.type = Shell.IconExtractor.Enumes.ItemType.Folder;
-                     }
-                     else
-                     {
-                         stru.type = Shell.IconExtractor.Enumes.ItemType.File;
-                     }
-                     stru.path = item.SysPath;
-
-
-                     string SysPathImage = Path.GetFullPath(Path.Combine("Data", $"{item.SysName}.png"));
-                     if (File.Exists(SysPathImage))
-                     {
-                         this.Dispatcher.Invoke(() =>
-                         {
-
-                             FilePanel c_ = new View.FilePanel();
-                             c_.SetData(item.SysName, item.SysPath);
-                             c_.SetImage(SysPathImage);
-                             _wrappanel.Children.Add(c_);
-                         });
-                         continue;
-                     }
-
-
-                     using (IcoExtractor extr = new IcoExtractor(stru))
-                     {
-                         if (extr.GetIcon != null)
-                         {
-
-                             Debug.WriteLine(SysPathImage);
-                             extr.SaveToFile(SysPathImage);
-
-
-                             extr.Dispose();
-                             this.Dispatcher.Invoke(() =>
-                             {
-
-                                 FilePanel c_ = new View.FilePanel();
-                                 c_.SetData(item.SysName, item.SysPath);
-                                 c_.SetImage(SysPathImage);
-                                 _wrappanel.Children.Add(c_);
-                             });
-                         }
-                     }
-
-
-                 }
-                 status_cl = false;
-             });
-
-            TaskBackShell.Start();
-        }
-
-
-
-
-        public async Task SaveData()
-        {
-            __List_Applications.WindowSize = new System.Windows.Size(this.ActualWidth, this.ActualHeight);
-            FIO.WriteFileToJsonObject("__applications.json", __List_Applications);
+            G_.AllOptions.Load();
 
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
         public void SetVisibility(bool Status)
         {
-            this.Visibility = Status ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-
-
+            this.Visibility = Status == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
         }
         public void SetVisibilityStatus()
         {
             this.Visibility = this.Visibility == System.Windows.Visibility.Collapsed ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
-
-
         }
         public void ResatructWindow()
         {
@@ -248,12 +181,12 @@ namespace WIndShellExperienceHost
 
 
 
-        private async void Window_Drop(object sender, System.Windows.DragEventArgs e)
+        private void Window_Drop(object sender, System.Windows.DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
 
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
 
                 string name_ = "";
 
@@ -273,11 +206,15 @@ namespace WIndShellExperienceHost
                         SysPath = _path,
                         SysName = name_,
                     };
-                    if (!__List_Applications.apps.Contains(new_app))
-                        __List_Applications.apps.Add(new_app);
+                    if (!G_.AllOptions.List_Applications.apps.Contains(new_app))
+                        G_.AllOptions.List_Applications.apps.Add(new_app);
                 }
-                this.ShellIconExtractorTask();
-                await this.SaveData();
+                this.Dispatcher.Invoke(() =>
+                {
+                    ui_applications.ShellIconExtractorTask();
+                    G_.AllOptions.SaveData();
+                });
+
 
             }
         }

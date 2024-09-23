@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using WIndShellExperienceHost.ViewModel;
@@ -14,7 +13,7 @@ namespace WIndShellExperienceHost.View
         {
             get; set;
         }
-        private Shell.IconExtractor.Enumes.ItemType Type;
+        public Shell.IconExtractor.Enumes.ItemType Type;
 
         public void SetData(string SysName, string SysPath)
         {
@@ -22,9 +21,6 @@ namespace WIndShellExperienceHost.View
             SystemPath = SysPath;
             (this.DataContext as VM_FilePanel).FilePath = SystemPath;
         }
-
-
-
         public void SetImage(string SysPathImage)
         {
             if (!File.Exists(SysPathImage))
@@ -50,65 +46,26 @@ namespace WIndShellExperienceHost.View
             {
                 DecelerationRatio = 0.1,
                 From = 0,
-                // SpeedRatio = 4,
+
                 To = 1,
-                Duration = TimeSpan.FromSeconds(1)
+                Duration = TimeSpan.FromSeconds(0.5)
             };
             this.BeginAnimation(FilePanel.OpacityProperty, buttonAnimation);
-
             this.DataContext = new VM_FilePanel();
-            this.MouseRightButtonDown += FilePanel_MouseRightButtonDown;
-            this.MouseLeftButtonDown += FilePanel_MouseLeftButtonDown;
-
         }
-
-        private void FilePanel_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        public void AnimationRemove(Action action = null)
         {
-            l_winapi.Module.Trycatch.trycatch(() =>
+            DoubleAnimation anim_ = new DoubleAnimation()
             {
-                switch (Type)
-                {
-                    case Shell.IconExtractor.Enumes.ItemType.Drive:
 
-                        break;
-                    case Shell.IconExtractor.Enumes.ItemType.Folder:
-                        //int status_ = Helper.ShellExplorer(IntPtr.Zero, "open", this.SystemPath);
+                From = 1,
 
-                        //Debug.WriteLine(status_);
+                To = 0,
+                Duration = TimeSpan.FromSeconds(1)
+            };
 
-                        break;
-                    case Shell.IconExtractor.Enumes.ItemType.File:
-
-                        break;
-                    default:
-                        break;
-                }
-
-
-            });
-        }
-
-        private void FilePanel_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            l_winapi.Module.Trycatch.trycatch(() =>
-            {
-                switch (Type)
-                {
-                    case Shell.IconExtractor.Enumes.ItemType.Drive:
-
-                        break;
-                    case Shell.IconExtractor.Enumes.ItemType.Folder:
-                        Process.Start("explorer.exe", $"/select, \"{this.SystemPath}\"");
-                        break;
-                    case Shell.IconExtractor.Enumes.ItemType.File:
-                        Process.Start("explorer.exe", this.SystemPath);
-                        break;
-                    default:
-                        break;
-                }
-
-
-            });
+            anim_.Completed += (o, e) => { action?.Invoke(); };
+            this.BeginAnimation(FilePanel.OpacityProperty, anim_);
         }
     }
 }

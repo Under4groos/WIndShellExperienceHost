@@ -13,21 +13,7 @@
              MaxWidth="105" MaxHeight="80"
              >
 
-    <UserControl.Style>
-        <Style TargetType="{x:Type UserControl}">
-
-            <Setter Property="ContextMenu">
-                <Setter.Value>
-                    <ContextMenu Background="Transparent" >
-                        <MenuItem Header="Show in Explorer" />
-                        <MenuItem Header="Copy path"/>
-                        <MenuItem Header="* Run" />
-                        <MenuItem Header="* Remove"/>
-                    </ContextMenu>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Style>
+     
     <UserControl.ToolTip>
         <ToolTip>
             <Border CornerRadius="4" BorderThickness="1" BorderBrush="{DynamicResource border}" Background="{DynamicResource border_back_color_hover}">
@@ -38,14 +24,14 @@
     <Border Style="{DynamicResource border_hover_button}" CornerRadius="4" BorderThickness="0" BorderBrush="#4d4d4d">
         <Grid>
 
-            <Grid Margin="2">
+            <Grid >
                 <Border  Width="30" Height="30">
 
                     <Image x:Name="_icon" Panel.ZIndex="-1"/>
                 </Border>
 
             </Grid>
-            <Border VerticalAlignment="Bottom" Margin="0,0,0,0" Background="{DynamicResource border_color_line_text}">
+            <Border VerticalAlignment="Bottom" Margin="0,0,0,5" Background="{DynamicResource border_color_line_text}">
                 <Label Name="_name" HorizontalContentAlignment="Center" Foreground="White" Content="{Binding FilePathA}"/>
             </Border>
         </Grid>

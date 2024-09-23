@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace l_winapi.Enums
 {
-    public static class EmunCustomMethods
+    public static class EnumCustomMethods
     {
         public static string GetIconValue(this Enum value)
         {

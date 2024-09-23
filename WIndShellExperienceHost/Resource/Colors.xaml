@@ -13,7 +13,12 @@
 
     <SolidColorBrush x:Key="border_back_color" Color="Black" Opacity="0.001"/>
     <SolidColorBrush x:Key="border_back_color_hover" Color="#2c2c2c"/>
+    <SolidColorBrush x:Key="border_back_color_op_11" Color="White" Opacity="0.21"/>
+
 
     <SolidColorBrush x:Key="border_color_line_text" Color="#4d4d4d" Opacity="0"/>
-     
+
+
+
+    
 </ResourceDictionary> 

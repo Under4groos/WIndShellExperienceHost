@@ -1,6 +1,7 @@
 ﻿using l_winapi.Delegates;
 using l_winapi.Module;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using System.IO;
 
 namespace l_winapi.InputOutput
@@ -30,6 +31,7 @@ namespace l_winapi.InputOutput
 
                 string obj_str = JsonConvert.SerializeObject(obj, Formatting.Indented);
                 File.WriteAllText(path, obj_str);
+                Debug.WriteLine($"Save in file: {path}");
             });
 
         }
