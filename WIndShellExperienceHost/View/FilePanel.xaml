@@ -9,11 +9,22 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50"
              Margin="3" 
-             MinWidth="110" MinHeight="80"
-             MaxWidth="105" MaxHeight="80"
+             Width="130" Height="80"
+              
              >
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="_name" To="1.0" Storyboard.TargetProperty="Opacity" Duration="0:0:0.5" />
 
-     
+                    <ThicknessAnimation Storyboard.TargetName="_name" From="0 -32 0 0" To="0 0 0 0" Storyboard.TargetProperty="Margin" Duration="0:0:0.5" />
+
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+
     <UserControl.ToolTip>
         <ToolTip>
             <Border CornerRadius="4" BorderThickness="1" BorderBrush="{DynamicResource border}" Background="{DynamicResource border_back_color_hover}">

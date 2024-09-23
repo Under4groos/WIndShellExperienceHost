@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ContextMenu x:Key="_cm_select">
-            <Controls:Context_MenuItem Tag="ra" Header="Run is Administrator"/>
+            <Controls:Context_MenuItem Visibility="Collapsed" Tag="ra" Header="Run is Administrator"/>
             <Controls:Context_MenuItem Tag="sh" Header="Show in Explorer"/>
             <Controls:Context_MenuItem Tag="cp" Header="Copy path"/>
             <Controls:Context_MenuItem Tag="rm" Header="Remove "/>

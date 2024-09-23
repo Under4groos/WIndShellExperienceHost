@@ -1,11 +1,6 @@
 ﻿// dllmain.cpp : Определяет точку входа для приложения DLL.
-#include "pch.h"
-#include <cstdio>
-#include <iostream>
-#include <shellapi.h>
-#include <string>
-#include <winuser.h>
-#include <Windows.h>
+#include "Includes.h"
+ 
 MSG msg;
 POINT point;
 

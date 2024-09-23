@@ -8,6 +8,23 @@ namespace WIndShellExperienceHost.View
 
     public partial class FilePanel : System.Windows.Controls.UserControl
     {
+        private DoubleAnimation buttonAnimation = new DoubleAnimation()
+        {
+            DecelerationRatio = 0.1,
+            From = 0,
+
+            To = 1,
+            Duration = TimeSpan.FromSeconds(0.2)
+        };
+        private ThicknessAnimation LabelAnimations;
+        private DoubleAnimation anim_ = new DoubleAnimation()
+        {
+
+            From = 1,
+
+            To = 0,
+            Duration = TimeSpan.FromSeconds(0.2)
+        };
 
         public string SystemPath
         {
@@ -42,27 +59,31 @@ namespace WIndShellExperienceHost.View
             InitializeComponent();
             this.Opacity = 0;
 
-            DoubleAnimation buttonAnimation = new DoubleAnimation()
-            {
-                DecelerationRatio = 0.1,
-                From = 0,
 
-                To = 1,
-                Duration = TimeSpan.FromSeconds(0.5)
-            };
             this.BeginAnimation(FilePanel.OpacityProperty, buttonAnimation);
             this.DataContext = new VM_FilePanel();
+
+            this.Loaded += FilePanel_Loaded;
+            this.MouseEnter += FilePanel_MouseEnter;
         }
-        public void AnimationRemove(Action action = null)
+
+        private void FilePanel_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            DoubleAnimation anim_ = new DoubleAnimation()
+            //_name.BeginAnimation(System.Windows.Controls.Label.MarginProperty, LabelAnimations);
+        }
+
+        private void FilePanel_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            LabelAnimations = new ThicknessAnimation()
             {
-
-                From = 1,
-
-                To = 0,
+                From = new System.Windows.Thickness(),
+                To = new System.Windows.Thickness(-(this.ActualWidth + 60), 0, 0, 0),
                 Duration = TimeSpan.FromSeconds(1)
             };
+        }
+
+        public void AnimationRemove(Action action = null)
+        {
 
             anim_.Completed += (o, e) => { action?.Invoke(); };
             this.BeginAnimation(FilePanel.OpacityProperty, anim_);

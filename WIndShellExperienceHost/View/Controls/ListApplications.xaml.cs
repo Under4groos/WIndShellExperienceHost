@@ -66,6 +66,7 @@ namespace WIndShellExperienceHost.View.Controls
                             panel_.AnimationRemove(() =>
                             {
                                 _wrappanel.Children.RemoveAt(i);
+
                             });
 
                             break;
@@ -85,11 +86,17 @@ namespace WIndShellExperienceHost.View.Controls
 
                     Util.local_ProcessStart(SelectFilePanel.SystemPath, isadmin: true);
                     break;
+                case "cp":
+
+                    // SelectFilePanel.SystemPath
+                    break;
                 default:
                     break;
             }
 
         }
+
+
 
         public void add_new_item_FilePanel(
           Shell.IconExtractor.Strucrure.IcoExtractorOptions stru,
