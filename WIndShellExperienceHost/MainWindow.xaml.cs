@@ -32,6 +32,10 @@ namespace WIndShellExperienceHost
         {
             InitializeComponent();
             Directory.CreateDirectory("Data");
+
+
+
+
             IntPtr HWND = new WindowInteropHelper(this).Handle;
             #region hotkey
             hotKeyBinder.AddHotKey(new STRUCT_HotKey()

@@ -51,13 +51,7 @@ namespace WIndShellExperienceHost.View.Controls
             switch (mi.Tag.ToString().ToLower())
             {
                 case "rm":
-
-                    Debug.WriteLine(SelectFilePanel.SystemPath);
-
-
                     G_.AllOptions.List_Applications.Remove(SelectFilePanel.SystemPath);
-
-
                     for (int i = 0; i < _wrappanel.Children.Count; i++)
                     {
                         var panel_ = (FilePanel)(_wrappanel.Children[i]);
@@ -72,14 +66,8 @@ namespace WIndShellExperienceHost.View.Controls
                             break;
                         }
                     }
-
-
-                    //this.ShellIconExtractorTask();
-                    //this.ShellIconExtractorTask();
-                    //await this.SaveData();
                     break;
                 case "sh":
-
                     Util.StartExplorerSelect(SelectFilePanel.SystemPath);
                     break;
                 case "ra":
@@ -87,8 +75,7 @@ namespace WIndShellExperienceHost.View.Controls
                     Util.local_ProcessStart(SelectFilePanel.SystemPath, isadmin: true);
                     break;
                 case "cp":
-
-                    // SelectFilePanel.SystemPath
+                    Helper.clipboard_set_data(0, SelectFilePanel.SystemPath);
                     break;
                 default:
                     break;

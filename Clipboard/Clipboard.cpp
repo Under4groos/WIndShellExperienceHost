@@ -29,15 +29,25 @@ int main()
 #endif // write_debug
 
 
-
 	if (OpenClipboard(console_hwnd)) {
-		Hwnd hwnd_clp = GetClipboardData(CUR_CF);
+
+		const char* output = "Test";
+		const size_t len = strlen(output) + 1;
+		HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, len);
+		memcpy(GlobalLock(hMem), output, len);
+		GlobalUnlock(hMem);
+
+		EmptyClipboard();
+		SetClipboardData(CF_TEXT, hMem);
+
+
+		/*Hwnd hwnd_clp = GetClipboardData(CUR_CF);
 		if (hwnd_clp != nullptr) {
 			char* pszText = static_cast<char*>(GlobalLock(hwnd_clp));
 			if (pszText != nullptr) {
 				cout << pszText << endl;
 			}
-		}
+		}*/
 	}
 	CloseClipboard();
 

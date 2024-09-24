@@ -8,7 +8,7 @@ tagRECT RECTThis;
 
 
 // #define LP (LPCWSTR)
-#define DLLEXPORT extern "C" __declspec(dllexport)
+
 
 DLLEXPORT int _GetCursorPosX();
 

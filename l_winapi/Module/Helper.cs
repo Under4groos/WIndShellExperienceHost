@@ -13,6 +13,11 @@ namespace l_winapi.Module
         public static extern int _GetMessage();
 
 
+
+        /// DLLEXPORT bool clipboard_set_data(HWND Hwnd, const char* output) {
+        [DllImport(WinApiLibs.c_win_module, CallingConvention = CallingConvention.Cdecl, EntryPoint = "clipboard_set_data")]
+        public static extern bool clipboard_set_data(IntPtr Hwnd, string output);
+
         [DllImport(WinApiLibs.c_win_module, CallingConvention = CallingConvention.Cdecl, EntryPoint = "GetLastErrorAsString")]
         public static extern string LastError();
 
