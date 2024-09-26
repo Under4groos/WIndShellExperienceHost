@@ -13,7 +13,14 @@ namespace l_winapi.Enums
 
             return string.Join(",", (from atr in attribs select atr.Value));
         }
+        public static string GetIconValueAll(this Enum value)
+        {
+            Type type = value.GetType();
+            FieldInfo fieldInfo = type.GetField(value.ToString());
+            IconValueAttribute[] attribs = fieldInfo.GetCustomAttributes(typeof(IconValueAttribute), false) as IconValueAttribute[];
 
+            return string.Join(",", (from atr in attribs select atr));
+        }
 
     }
 }

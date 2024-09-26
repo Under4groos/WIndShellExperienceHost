@@ -4,19 +4,20 @@
     {
         public object Value { get; protected set; }
 
-        public bool IsMSapp
-        {
-            get; set;
-        } = false;
+
         public string StrMS
         {
             get; set;
         } = string.Empty;
-        public IconValueAttribute(object value, bool _IsMSapp = false, string _StrMS = "")
+        public IconValueAttribute(object value, string _StrMS = "")
         {
             this.Value = value;
-            this.IsMSapp = _IsMSapp;
+
             this.StrMS = _StrMS;
+        }
+        public override string ToString()
+        {
+            return $"{this.Value}|{this.StrMS}";
         }
     }
 }

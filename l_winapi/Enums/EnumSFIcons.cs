@@ -13,15 +13,15 @@ namespace l_winapi.Enums
         [IconValueAttribute("\ue7e8")]
         Power,
         // MS -- https://learn.microsoft.com/ru-ru/windows/uwp/launch-resume/launch-settings-app
-        [IconValueAttribute("\ue756", _IsMSapp: false, StrMS = "cmd")]
+        [IconValueAttribute("\ue756", StrMS = "cmd")]
         Console,
-        [IconValueAttribute("\ue701", _IsMSapp: true, StrMS = "ms-settings:network-wifi")]
+        [IconValueAttribute("\ue701", StrMS = "ms-settings:network-wifi")]
         WiFi,
-        [IconValueAttribute("\uec41", _IsMSapp: true, StrMS = "ms-settings:bluetooth")]
+        [IconValueAttribute("\uec41", StrMS = "ms-settings:bluetooth")]
         Bluetooth,
-        [IconValueAttribute("\ue767", _IsMSapp: true, StrMS = "ms-settings:sound")]
+        [IconValueAttribute("\ue767", StrMS = "ms-settings:sound")]
         Sound,
-        [IconValueAttribute("\ue7f3", _IsMSapp: true, StrMS = "ms-settings:sound-devices")]
+        [IconValueAttribute("\ue7f3", StrMS = "ms-settings:sound-devices")]
         SoundDevices,
 
     }

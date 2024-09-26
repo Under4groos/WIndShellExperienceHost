@@ -7,15 +7,27 @@
              mc:Ignorable="d" Margin="2" MinHeight="65" VerticalAlignment="Bottom" 
              d:DesignHeight="65" d:DesignWidth="800">
     <Border   Background="{DynamicResource border_down}">
-        <StackPanel  Margin="10,0,10,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+        <StackPanel Name="_buttons" Margin="10,0,10,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
             <Controls:SegoeFluentIcons Icon="Console" />
+            <Border Width="2" Background="{DynamicResource border_back_color_op_11}" Margin="5,10,5,10"/>
+            
+            <Controls:SegoeFluentIcons Icon="Sound" />
+            <Controls:SegoeFluentIcons Icon="SoundDevices"/>
+            <Border Width="2" Background="{DynamicResource border_back_color_op_11}" Margin="5,10,5,10"/>
+            
             <Controls:SegoeFluentIcons Icon="WiFi" />
+            <Controls:SegoeFluentIcons Icon="Bluetooth" />
+            <Border Width="2" Background="{DynamicResource border_back_color_op_11}" Margin="5,10,5,10"/>
             
             <Controls:SegoeFluentIcons Icon="Downloads" />
             <Controls:SegoeFluentIcons Icon="Drives" />
+            
+
+
+            <Border Width="2" Background="{DynamicResource border_back_color_op_11}" Margin="5,10,5,10"/>
             <Controls:SegoeFluentIcons Icon="Setting" />
             <Controls:SegoeFluentIcons Icon="Power" />
-            
+
            
         </StackPanel>
     </Border>

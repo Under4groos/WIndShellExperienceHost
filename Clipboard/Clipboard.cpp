@@ -38,16 +38,7 @@ int main()
 		GlobalUnlock(hMem);
 
 		EmptyClipboard();
-		SetClipboardData(CF_TEXT, hMem);
-
-
-		/*Hwnd hwnd_clp = GetClipboardData(CUR_CF);
-		if (hwnd_clp != nullptr) {
-			char* pszText = static_cast<char*>(GlobalLock(hwnd_clp));
-			if (pszText != nullptr) {
-				cout << pszText << endl;
-			}
-		}*/
+		SetClipboardData(CF_TEXT, hMem); 
 	}
 	CloseClipboard();
 
