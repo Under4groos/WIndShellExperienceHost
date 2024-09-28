@@ -12,6 +12,11 @@ namespace l_winapi.Module
         [DllImport(WinApiLibs.c_win_module)]
         public static extern int _GetMessage();
 
+        [DllImport("shell32", CharSet = CharSet.Unicode,
+                    ExactSpelling = true, PreserveSig = false)]
+        public static extern string SHGetKnownFolderPath(
+            [MarshalAs(UnmanagedType.LPStruct)]
+         Guid rfid, uint dwFlags, nint hToken = default);
 
 
         /// DLLEXPORT bool clipboard_set_data(HWND Hwnd, const char* output) {

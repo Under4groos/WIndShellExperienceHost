@@ -83,7 +83,19 @@ DLLEXPORT bool _FreeConsole()
 
 #pragma region Shell
 
+ 
+//STDAPI SHGetKnownFolderPath(_In_ REFKNOWNFOLDERID rfid,
+//	_In_ DWORD /* KNOWN_FOLDER_FLAG */ dwFlags,
+//	_In_opt_ HANDLE hToken,
+//	_Outptr_ PWSTR* ppszPath);
 
+DLLEXPORT HRESULT STDAPICALLTYPE Shell_GetKnownFolderPath(_In_ REFKNOWNFOLDERID rfid,
+	_In_ DWORD   dwFlags,
+	_In_opt_ HANDLE hToken,
+	_Outptr_ PWSTR* ppszPath)
+{
+	return SHGetKnownFolderPath(rfid , dwFlags, hToken , ppszPath);
+}
 
 //SHSTDAPI_(HINSTANCE) ShellExecuteW(
 //	_In_opt_ HWND hwnd,

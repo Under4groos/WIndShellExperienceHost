@@ -23,6 +23,13 @@ namespace l_winapi.Module
             local_ProcessStart("explorer.exe", $"/select, \"{command}\"");
         }
 
+        public static void MS_Start(string FileName)
+        {
+            if (FileName != string.Empty)
+                local_ProcessStart(FileName);
+        }
+
+
         public static void local_ProcessStart(string path, string args = "", bool isadmin = false)
         {
 

@@ -21,8 +21,8 @@
             
             <Controls:SegoeFluentIcons Icon="Downloads" />
             <Controls:SegoeFluentIcons Icon="Drives" />
-            
 
+           
 
             <Border Width="2" Background="{DynamicResource border_back_color_op_11}" Margin="5,10,5,10"/>
             <Controls:SegoeFluentIcons Icon="Setting" />

@@ -1,5 +1,6 @@
 ﻿using l_winapi.Enums;
-using System.Diagnostics;
+using l_winapi.Module;
+using WIndShellExperienceHost.Module;
 
 namespace WIndShellExperienceHost.View.Controls
 {
@@ -18,37 +19,32 @@ namespace WIndShellExperienceHost.View.Controls
                 {
                     _button.PreviewMouseLeftButtonDown += _button_PreviewMouseLeftButtonDown;
                 }
-
             }
         }
 
         private void _button_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var icon = ((SegoeFluentIcons)(sender)).Icon;
-            Debug.WriteLine(icon.GetIconValueAll());
-            //switch (icon)
-            //{
-            //    case l_winapi.Enums.EnumSFIcons.Downloads:
-            //        break;
-            //    case l_winapi.Enums.EnumSFIcons.Drives:
-            //        break;
-            //    case l_winapi.Enums.EnumSFIcons.Setting:
-            //        break;
-            //    case l_winapi.Enums.EnumSFIcons.Power:
-            //        break;
-            //    case l_winapi.Enums.EnumSFIcons.Console:
-            //        break;
-            //    case l_winapi.Enums.EnumSFIcons.WiFi:
-            //        break;
-            //    case l_winapi.Enums.EnumSFIcons.Bluetooth:
-            //        break;
-            //    case l_winapi.Enums.EnumSFIcons.Sound:
-            //        break;
-            //    case l_winapi.Enums.EnumSFIcons.SoundDevices:
-            //        break;
-            //    default:
-            //        break;
-            //}
+            G_.MainWindow.SetVisibility(false);
+            SegoeFluentIcons _control = ((SegoeFluentIcons)(sender));
+
+            switch (_control.Icon)
+            {
+                case EnumSFIcons.Downloads:
+                    string path = KnownFolders.GetPath("Downloads");
+                    Util.StartExplorer(path);
+                    break;
+                case EnumSFIcons.Drives:
+
+                    Util.StartExplorer();
+                    break;
+                default:
+                    var icon = _control.Icon.GetIconValues().First();
+                    Util.MS_Start(icon.StrMS);
+                    break;
+            }
+
+
+
 
         }
     }

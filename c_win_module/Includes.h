@@ -6,5 +6,5 @@
 #include <string>
 #include <winuser.h>
 #include <Windows.h>
-
+#include <ShlObj.h>
 #define DLLEXPORT extern "C" __declspec(dllexport)

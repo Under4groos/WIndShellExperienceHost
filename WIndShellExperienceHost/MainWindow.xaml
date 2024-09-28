@@ -45,11 +45,12 @@
                     <BlurEffect Radius="10"/>
                 </Border.Effect>
                 <Border.Background>
-                    <ImageBrush Opacity="0.1" ImageSource="C:\Users\UnderKo\Documents\з.png" Stretch="UniformToFill"/>
+                    <ImageBrush Opacity="0.1" ImageSource="C:\Users\UnderKo\Downloads\c84abc3e23190b2d1e079e203b6c8fd5.jpg" Stretch="UniformToFill"/>
                 </Border.Background>
 
-
+               
             </Border>
+            <Label Content="Go away" FontSize="40" Foreground="White" Opacity="0.1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             <Controls:ListApplications x:Name="ui_applications" Margin="0,0,0,62" />
 
             <Controls:BottomTrayWnd  />

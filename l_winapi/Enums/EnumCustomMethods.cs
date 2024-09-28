@@ -7,20 +7,19 @@ namespace l_winapi.Enums
     {
         public static string GetIconValue(this Enum value)
         {
-            Type type = value.GetType();
-            FieldInfo fieldInfo = type.GetField(value.ToString());
-            IconValueAttribute[] attribs = fieldInfo.GetCustomAttributes(typeof(IconValueAttribute), false) as IconValueAttribute[];
-
-            return string.Join(",", (from atr in attribs select atr.Value));
+            return string.Join(",", (from atr in GetIconValues(value) select atr.Value));
         }
         public static string GetIconValueAll(this Enum value)
         {
+            return string.Join(",", (from atr in GetIconValues(value) select atr));
+        }
+        public static IconValueAttribute[] GetIconValues(this Enum value)
+        {
             Type type = value.GetType();
             FieldInfo fieldInfo = type.GetField(value.ToString());
-            IconValueAttribute[] attribs = fieldInfo.GetCustomAttributes(typeof(IconValueAttribute), false) as IconValueAttribute[];
+            return fieldInfo.GetCustomAttributes(typeof(IconValueAttribute), false) as IconValueAttribute[];
 
-            return string.Join(",", (from atr in attribs select atr));
+
         }
-
     }
 }
